@@ -1,0 +1,909 @@
+﻿<UserControl x:Class="ASIapp.FirstPageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ASIapp"
+        mc:Ignorable="d" Background="White">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Vertical" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Grid Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label Width="70" Content="M rows" HorizontalAlignment="Left" VerticalAlignment="Center"></Label>
+                        <TextBox Text="6" x:Name="NumberOfRows" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="NumberOfRows_TextChanged" Height="26" HorizontalAlignment="Left"  Width="40"/>
+                    </Grid>
+                    <Grid Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label Width="70" Content="N cols" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBox Text="6"  x:Name="NumberOfColumns" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="NumberOfColumns_TextChanged" Width="40" Height="26" HorizontalAlignment="Center"/>
+                        <CheckBox  Content="debug" Grid.Column="2"   Height="16" VerticalAlignment="Center" Checked="CheckBoxDebug_Checked"  HorizontalAlignment="Left" Margin="30,0,0,0" Width="53"/>
+
+                    </Grid>
+
+
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Orientation="Vertical" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" Grid.Row="0" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Width="70" Content="n__of__A" HorizontalAlignment="Left" VerticalAlignment="Center"></Label>
+                            <TextBox Text="2"  x:Name="NumberOfA" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="NumberOfA_TextChanged" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center" Width="40"/>
+                        </Grid>
+                        <Grid Grid.Column="0"  Grid.Row ="1"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Width="70" Content="n__of__D" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox  Text="2" x:Name="NumberOfD" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="NumberOfD_TextChanged" Width="40" Height="26" HorizontalAlignment="Center"/>
+                        </Grid>
+                        <Grid   Grid.Column="0"  Grid.Row="2"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Width="70" Content="n__of__B" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox Text="4" x:Name="NumberOfB" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="NumberOfB_TextChanged" Width="40" Height="26" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Grid.Column="1" Grid.Row="0"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <RadioButton x:Name="rbtn_readCaStates" VerticalAlignment="Center" HorizontalAlignment="Center"></RadioButton>
+                            <Button Grid.Column="1" x:Name="Btn_readCaStates" Click="Btn_readCaStates_Click">read CA__STATES</Button>
+                        </Grid>
+                        <Grid Grid.Column="1" Grid.Row="1"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <RadioButton x:Name="rbtn_readAprofile" HorizontalAlignment="Center" VerticalAlignment="Center"></RadioButton>
+                            <Button Grid.Column="1"  x:Name="Btn_readAProfile" Click="Btn_readAProfile_Click">read A__PROFILE</Button>
+                        </Grid>
+                        <Grid Grid.Column="1" Grid.Row="2"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <RadioButton x:Name="rbtn_readRandNum" VerticalAlignment="Center" HorizontalAlignment="Center"></RadioButton>
+                            <Button Grid.Column="1" x:Name="Btn_ReadRandNum" Click="Btn_ReadRandNum_Click">read RAND__NUM</Button>
+                        </Grid>
+                    </Grid>
+
+
+
+                </StackPanel>
+
+                <StackPanel Grid.Row="3" Orientation="Vertical" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" Grid.Row="0" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Width="70" Content="n__of__iter" HorizontalAlignment="Left" VerticalAlignment="Center"></Label>
+                            <TextBox Text="5" x:Name="NumberOfiter" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="NumberOfiter_TextChanged" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center" Width="40"/>
+                        </Grid>
+                        <Grid Grid.Column="0" Grid.Row="1"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="8*" />
+                                <ColumnDefinition Width="33*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Width="70" Content="n__of__exper" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBox Text="1" x:Name="NumberOfexper" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="NumberOfexper_TextChanged" Width="40" Height="26" HorizontalAlignment="Left" Grid.ColumnSpan="2"/>
+                        </Grid>
+
+                        <Grid Grid.Column="1" Grid.Row="0"  Margin="15,2,2,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <RadioButton GroupName="TestGroup" Checked="RadioButton_Checked" x:Name="test_1" VerticalAlignment="Center" HorizontalAlignment="Center">test_1</RadioButton>
+                            <RadioButton  Margin="15,0,0,0" Grid.Column="1" GroupName="SeedGroup" x:Name="RbtnClockSeed" Checked="RbtnClockSeed_Checked" VerticalAlignment="Center" HorizontalAlignment="Center">clock__seed</RadioButton>
+                        </Grid>
+                        <Grid Grid.Column="1" Grid.Row="1"  Margin="15,2,2,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <RadioButton GroupName="TestGroup"  Checked="RadioButton_Checked" x:Name="test_2" VerticalAlignment="Center" HorizontalAlignment="Center">test_2</RadioButton>
+                            <RadioButton Margin="15,0,0,0" Grid.Column="1" GroupName="SeedGroup"  x:Name="RbtnCustomSeed" Checked="RbtnCustomSeed_Checked" VerticalAlignment="Center" HorizontalAlignment="Center">custom__seed</RadioButton>
+                            <TextBox  Margin="15,0,0,0" Grid.Column="1" Grid.Row="1"  x:Name="CustomSeedText"  PreviewTextInput="TextBox_PreviewNumbersOnly"  TextChanged="CustomSeedText_TextChanged"  IsEnabled="{Binding ElementName=RbtnCustomSeed, Path=IsChecked}"></TextBox>
+                        </Grid>
+                        <Grid Grid.Column="1" Grid.Row="2"  Margin="15,2,2,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <RadioButton  Checked="RadioButton_Checked" GroupName="TestGroup" x:Name="test_3" VerticalAlignment="Center" HorizontalAlignment="Center">test_3</RadioButton>
+
+                        </Grid>
+                    </Grid>
+
+
+                </StackPanel>
+                <StackPanel Grid.Row="4" VerticalAlignment="Center">
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center">Init__capit IC</Label>
+                        <TextBox  TextChanged="InitCapitIC_TextChanged" x:Name="Init_capitIC" Text="10" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="40" Height="26" ></TextBox>
+
+                    </Grid>
+                </StackPanel>
+
+
+                <StackPanel Grid.Row="5" >
+                    <Label FontWeight="Bold">Parameters of A</Label>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+
+                            </Grid.ColumnDefinitions>
+                            <Label Width="60" Content="IQ__range" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label>min</Label>
+                            <TextBox  Grid.Column="1" Text="70" x:Name="iqRangeMin" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="iqMin_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        </Grid>
+
+                        <Grid Grid.Column="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label>max</Label>
+                            <TextBox  Grid.Column="1" Text="140" x:Name="iqRangeMax" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="iqMax_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Label Grid.Row="1" FontWeight="Bold" Height="26" Grid.RowSpan="2" VerticalAlignment="Top">Health__state</Label>
+                        <Grid   Grid.Column="0"  Grid.Row="2"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="1" FontWeight="Bold">1</Label>
+                        </Grid>
+
+                        <Grid   Grid.Column="1"  Grid.Row="2"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="1" FontWeight="Bold">2</Label>
+                        </Grid>
+
+                        <Grid   Grid.Column="2"  Grid.Row="2"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="1" FontWeight="Bold">3</Label>
+                        </Grid>
+
+
+                        <Grid   Grid.Column="0"  Grid.Row="3"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Width="50" Content="p__HS1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox Text="4" x:Name="probabilityHealthState1" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityHS1_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Grid   Grid.Column="1"  Grid.Row="3"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Width="50" Content="p__HS2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox Text="4" x:Name="probabilityHealthState2" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityHS2_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Grid   Grid.Column="2"  Grid.Row="3"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Width="50" Content="p__HS3" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox Text="4" x:Name="probabilityHealthState3" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityHS3_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Grid   Grid.Column="0"  Grid.Row="4"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Width="50" Content="p__ill1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox Text="4" x:Name="probabilityIllness1" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityIll1_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Grid   Grid.Column="1"  Grid.Row="4"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Width="50" Content="p__ill2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox Text="4" x:Name="probabilityIllness2" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityIll2_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Grid   Grid.Column="2"  Grid.Row="4"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Width="50" Content="p__ill3" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox Text="4" x:Name="probabilityIllness3" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityIll3_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+
+                    </Grid>
+
+
+
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Label>n__iter__susp__B</Label>
+                        <TextBox Text="1" x:Name="numberOfIterSuspB" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" ></TextBox>
+                    </Grid>
+
+                    <Label FontWeight="Bold">Risk__accept__level (IQ)</Label>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition ></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+
+                        </Grid.RowDefinitions>
+
+
+                        <Grid Grid.Column="0" Grid.Row="0" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label  FontWeight="Bold" Width="50" Content="IQ &lt;" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox x:Name="iqLevelLessThan" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="iqLevelLessThan_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="95" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Grid Grid.Column="1" Grid.Row="0" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label  Content="IQ" HorizontalAlignment="Center" VerticalAlignment="Center"  />
+
+                        </Grid>
+
+                        <Grid Grid.Column="2" Grid.Row="0" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label FontWeight="Bold"  Width="50" Content="IQ &gt;" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox x:Name="iqLevelGreaterThan" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="iqLevelGreaterThan_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="125" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Grid   Grid.Column="0"  Grid.Row="2"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="1"  FontWeight="Bold">p__acc</Label>
+                        </Grid>
+
+                        <Grid   Grid.Column="1"  Grid.Row="2"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="1" FontWeight="Bold">p__acc</Label>
+                        </Grid>
+
+                        <Grid   Grid.Column="2"  Grid.Row="2"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="1" FontWeight="Bold">p__acc</Label>
+                        </Grid>
+
+                        <Grid Grid.Column="0" Grid.Row="3" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label FontWeight="Bold"  Width="50" Content="B1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox x:Name="paccB11" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="paccB11_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="1.0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Grid Grid.Column="0" Grid.Row="4" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label FontWeight="Bold"  Width="50" Content="B2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox x:Name="paccB12" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="paccB12_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="0.9" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Grid Grid.Column="0" Grid.Row="5" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label FontWeight="Bold"  Width="50" Content="B3" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox x:Name="paccB13" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="paccB13_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="0.8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+
+
+                        <Grid Grid.Column="1" Grid.Row="3" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="paccB21" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="paccB21_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="0.9" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Grid Grid.Column="1" Grid.Row="4" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="paccB22" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="paccB22_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="0.7" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Grid Grid.Column="1" Grid.Row="5" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="paccB23" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="paccB23_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="0.5" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+
+
+                        <Grid Grid.Column="2" Grid.Row="3" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="paccB31" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="paccB31_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="0.9" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Grid Grid.Column="2" Grid.Row="4" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="paccB32" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="paccB32_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="0.6" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,3,0" />
+                        </Grid>
+
+                        <Grid Grid.Column="2" Grid.Row="5" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="paccB33" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="paccB33_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="0.4" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+                        </Grid>
+
+                    </Grid>
+                    <Label FontWeight="Bold">Mobility (IQ)</Label>
+                    <Grid VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition ></RowDefinition>
+                            <RowDefinition ></RowDefinition>
+                            <RowDefinition ></RowDefinition>
+
+                        </Grid.RowDefinitions>
+
+                        <Grid   Grid.Column="0"  Grid.Row="0"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="1" FontWeight="Bold">1</Label>
+                        </Grid>
+
+                        <Grid   Grid.Column="1"  Grid.Row="0"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="1" FontWeight="Bold">2</Label>
+                        </Grid>
+
+                        <Grid   Grid.Column="2"  Grid.Row="0"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="1" FontWeight="Bold">3</Label>
+                        </Grid>
+
+
+                        <Grid   Grid.Column="0"  Grid.Row="1"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="1" FontWeight="Bold">p__mob</Label>
+                        </Grid>
+
+                        <Grid   Grid.Column="1"  Grid.Row="1"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="1" FontWeight="Bold">p__mob</Label>
+                        </Grid>
+
+                        <Grid   Grid.Column="2"  Grid.Row="1"  Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="1" FontWeight="Bold">p__mob</Label>
+                        </Grid>
+
+                        <Grid Grid.Column="0" Grid.Row="2" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="pmobility1" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="paccB11_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Grid Grid.Column="1" Grid.Row="2" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="pmobility2" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="paccB12_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="0.3" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Grid Grid.Column="2" Grid.Row="2" Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="pmobility3" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="paccB13_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="0.1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+
+                    </Grid>
+                </StackPanel>
+
+                <Grid Grid.Row="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+
+                    </Grid.RowDefinitions>
+                    <Label Margin="5,5,0,0" FontWeight="Bold" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="92">Bussiness type</Label>
+
+
+
+                    <Grid   Grid.Column="0"  Grid.Row="1"  Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="1" FontWeight="Bold">thr</Label>
+                    </Grid>
+
+                    <Grid   Grid.Column="1"  Grid.Row="1"  Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" FontWeight="Bold">inv a</Label>
+                    </Grid>
+
+                    <Grid   Grid.Column="2"  Grid.Row="1"  Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Right" Width="99">increase of GAP</Label>
+                    </Grid>
+
+                    <Grid   Grid.Column="3"  Grid.Row="1"  Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" FontWeight="Bold" Margin="0,0,17,0">p__risk</Label>
+                    </Grid>
+
+                    <Grid   Grid.Column="4"  Grid.Row="1"  Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" FontWeight="Bold">p__avail__B</Label>
+                    </Grid>
+
+
+                    <Grid   Grid.Column="0" Grid.Row="2"    Margin="2" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" FontWeight="Bold">B1</Label>
+                        <TextBox x:Name="thrB1" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="thrB1_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="1.0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Label Grid.Column="2" FontWeight="Bold" HorizontalAlignment="Left" Width="36" >of IC</Label>
+                    </Grid>
+
+                    <Grid   Grid.Column="0" Grid.Row="3"    Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" FontWeight="Bold">B2</Label>
+                        <TextBox x:Name="thrB2" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="thrB2_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="1.0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Label Grid.Column="2" FontWeight="Bold" HorizontalAlignment="Left" Width="36">of IC</Label>
+
+                    </Grid>
+
+                    <Grid   Grid.Column="0" Grid.Row="4"    Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" FontWeight="Bold">B1</Label>
+                        <TextBox x:Name="thrB3" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="thrB3_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="8.0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Label Grid.Column="2" FontWeight="Bold" HorizontalAlignment="Left" Width="36">of IC</Label>
+                    </Grid>
+
+                    <Grid   Grid.Column="1" Grid.Row="2"    >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Text="0.2"  x:Name="inv_a_B1"  TextChanged="inv_a_B1_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,15,0" />
+
+                    </Grid>
+
+                    <Grid   Grid.Column="1" Grid.Row="3"   >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Text="0.5"  x:Name="inv_a_B2"  TextChanged="inv_a_B2_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,15,0" />
+
+                    </Grid>
+
+                    <Grid   Grid.Column="1" Grid.Row="4"   >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Text="0.5"  x:Name="inv_a_B3"  TextChanged="inv_a_B3_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,15,0" />
+
+                    </Grid>
+
+                    <Grid   Grid.Column="2" Grid.Row="2" Margin="0,0,25,0"    >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Text="2"  x:Name="increase_of_gap_B1"  TextChanged="increase_of_gap_B1_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                    </Grid>
+
+                    <Grid   Grid.Column="2" Grid.Row="3"   >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Text="4"  x:Name="increase_of_gap_B2"  TextChanged="increase_of_gap_B2_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,25,0" />
+
+                    </Grid>
+
+                    <Grid   Grid.Column="2" Grid.Row="4"   >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Text="8"  x:Name="increase_of_gap_B3"  TextChanged="increase_of_gap_B3_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,25,0" />
+
+                    </Grid>
+
+                    <Grid   Grid.Column="3" Grid.Row="2"    Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Text="0.10"  x:Name="p_risk_B1"  TextChanged="p_risk_B1_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,15,0" />
+
+                    </Grid>
+                    <Grid   Grid.Column="3" Grid.Row="3"    Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Text="0.30"  x:Name="p_risk_B2"  TextChanged="p_risk_B2_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,15,0" />
+
+                    </Grid>
+
+                    <Grid   Grid.Column="3" Grid.Row="4"    Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Text="0.50"  x:Name="p_risk_B3"  TextChanged="p_risk_B3_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,15,0" />
+
+                    </Grid>
+
+                    <Grid   Grid.Column="4" Grid.Row="2"    Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="p_avail_B1"  TextChanged="p_avail_B1_TextChanged"  Text="0.50"   PreviewTextInput="TextBox_PreviewNumbersOnly" Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        <Label Grid.Column="1" FontWeight="Bold">of IC</Label>
+                    </Grid>
+
+                    <Grid   Grid.Column="4" Grid.Row="3"    Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="p_avail_B2"  TextChanged="p_avail_B2_TextChanged"  Text="0.35"   PreviewTextInput="TextBox_PreviewNumbersOnly" Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        <Label Grid.Column="1" FontWeight="Bold">of IC</Label>
+                    </Grid>
+
+                    <Grid   Grid.Column="4" Grid.Row="4"    Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="p_avail_B3"  TextChanged="p_avail_B3_TextChanged"  Text="0.15"   PreviewTextInput="TextBox_PreviewNumbersOnly" Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        <Label Grid.Column="1" FontWeight="Bold">of IC</Label>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="7">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Margin="5" FontWeight="Bold">Wealth thr</Label>
+
+                    <Grid   Grid.Column="0"  Grid.Row="1"  Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" FontWeight="Bold">pooper</Label>
+                    </Grid>
+
+                    <Grid   Grid.Column="1"  Grid.Row="1"  Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" FontWeight="Bold">feasible</Label>
+                    </Grid>
+
+                    <Grid   Grid.Column="2"  Grid.Row="1"  Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" FontWeight="Bold">rich</Label>
+                    </Grid>
+
+                    <Grid   Grid.Column="0" Grid.Row="3"    Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="thr_pooper"  TextChanged="thr_pooper_TextChanged"  Text="10"   PreviewTextInput="TextBox_PreviewNumbersOnly" Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        <Label Grid.Column="1" FontWeight="Bold">of IC</Label>
+                    </Grid>
+
+                    <Grid   Grid.Column="1" Grid.Row="3"    Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="thr_feasible"  TextChanged="thr_feasible_TextChanged"  Text="30"   PreviewTextInput="TextBox_PreviewNumbersOnly" Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="21,0,0,0" />
+                        <Label Grid.Column="1" FontWeight="Bold">of IC</Label>
+                    </Grid>
+
+                    <Grid   Grid.Column="2" Grid.Row="3"    Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="thr_rich"  TextChanged="thr_rich_TextChanged"  Text="30"   PreviewTextInput="TextBox_PreviewNumbersOnly" Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        <Label Grid.Column="1" FontWeight="Bold">of IC</Label>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="8">
+                    <Button  x:Name="Btn_run" HorizontalAlignment="Center" VerticalAlignment="Center" Width="50" Height="26">Run</Button>
+                </Grid>
+
+            </Grid>
+
+            <Viewbox Stretch="Fill" Grid.Column="1" ClipToBounds="True">
+                <Canvas x:Name="myCanvas" Height="300" Width="300
+                    ">
+                    <Canvas.LayoutTransform>
+                        <ScaleTransform ScaleY="-1"/>
+                    </Canvas.LayoutTransform>
+                </Canvas>
+            </Viewbox>
+        </Grid>
+
+    </ScrollViewer>
+</UserControl>
+
