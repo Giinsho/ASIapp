@@ -25,10 +25,6 @@ namespace ASIapp
         private MainWindow _mainWindow;
         string currentDirectory = Directory.GetCurrentDirectory();
 
-       
-
-       
-
 
         #region First Section
 
@@ -134,11 +130,90 @@ namespace ASIapp
 
         #endregion
 
+        #region Rectangle and mesh
+        List<RectangleModel> rectList;
+        #endregion
         public FirstPageWindow(MainWindow window)
         {
             InitializeComponent();
+
             _mainWindow = window;
+            rectList = new List<RectangleModel>();
+
         }
+
+
+        private void DrawMesh()
+        {
+            rectList.Clear();
+            myCanvas.Children.Clear();
+            var cols = numberOfColumns+2;
+            var rows = numberOfRows+2;
+            
+            double cellWidth = myCanvas.ActualWidth / cols;
+            double cellHeight = myCanvas.ActualHeight / rows;
+
+            for (int i = 0; i <= rows; i++)
+            {
+                for (int j = 0; j <= cols; j++)
+                {
+                    Rectangle rect;
+                    if (i == 0 || j == 0 || j==cols-1 || i==rows-1 )
+                    {
+                        rect = new Rectangle
+                        {
+                            Width = cellWidth,
+                            Height = cellHeight,
+                            Stroke = Brushes.Red,
+                            StrokeThickness = 0.5,
+                            Fill = Brushes.Gray
+
+                        };
+                
+                    } else {
+                        rect = new Rectangle
+                        {
+                            Width = cellWidth,
+                            Height = cellHeight,
+                            Stroke = Brushes.Black,
+                            StrokeThickness = 0.5
+
+                        };
+                        rectList.Add(new RectangleModel(Width, Height, i, j, rect));
+                 
+                        
+                    }
+                    Canvas.SetLeft(rect, j * cellWidth);
+                    Canvas.SetTop(rect, i * cellHeight);
+                    myCanvas.Children.Add(rect);
+
+
+                }
+            }
+
+            ColorCellsAsAgents();
+
+        }
+
+        private void ColorCellsAsAgents()
+        {
+            var random = new Random();
+            var numberOfAgents = numberOfA;
+
+            rectList = rectList.OrderBy(x => random.Next()).ToList();
+
+            foreach (var rect in rectList.Take(numberOfAgents))
+            {
+                rect.Rectangle.Fill = Brushes.Orange;
+            }
+        }
+        private void UpdateMesh()
+        {
+            
+            DrawMesh();
+        }
+
+      
 
 
         private void TextBox_PreviewNumbersOnly(object sender, TextCompositionEventArgs e)
@@ -153,12 +228,14 @@ namespace ASIapp
             }
         }
 
+
         private void NumberOfRows_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
                 int.TryParse(NumberOfRows.Text, out int newValue);
                 numberOfRows = newValue;
+          
             }
             catch (Exception ex)
             {
@@ -172,8 +249,7 @@ namespace ASIapp
             {
                 int.TryParse(NumberOfColumns.Text, out int newValue);
                 numberOfColumns = newValue;
-
-
+           
             }
             catch (Exception ex)
             {
@@ -663,6 +739,10 @@ namespace ASIapp
 
         }
 
-       
+        private void Btn_run_Click(object sender, RoutedEventArgs e)
+        {
+           UpdateMesh();
+ 
+        }
     }
 }
