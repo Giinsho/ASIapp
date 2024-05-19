@@ -76,6 +76,7 @@ namespace ASIapp
         private int pIll3;
 
         private int numberIterSuspB;
+        private double numberDecRate; 
 
         #endregion
 
@@ -743,6 +744,16 @@ namespace ASIapp
         {
            UpdateMesh();
  
+        }
+
+        private void numberDicDecRate_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterDouble(sender, ref numberDecRate);
+        }
+
+        private void numberOfIterSuspB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterInt(sender, ref numberIterSuspB);
         }
     }
 }

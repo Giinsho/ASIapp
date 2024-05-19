@@ -36,10 +36,33 @@ namespace ASIapp
 
         private void CreateFolders()
         {
-            if (!Directory.Exists("CA-STATES"))
+            if (!Directory.Exists("CA_STATES"))
             {
-                Directory.CreateDirectory("CA-STATES");
+                Directory.CreateDirectory("CA_STATES");
             }
+            if (!Directory.Exists("A_PROFILE"))
+            {
+                Directory.CreateDirectory("A_PROFILE");
+            }
+
+            if (!Directory.Exists("RAND_NUM"))
+            {
+                Directory.CreateDirectory("RAND_NUM");
+            }
+
+            if (!Directory.Exists("RESULTS"))
+            {
+                Directory.CreateDirectory("RESULTS");
+            }
+
+            if (!Directory.Exists("RESULTS/DEBUG"))
+            {
+                Directory.CreateDirectory("RESULTS/DEBUG");
+            }
+
+
+
+
 
         }
 

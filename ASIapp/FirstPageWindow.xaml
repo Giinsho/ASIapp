@@ -7,7 +7,7 @@
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
         mc:Ignorable="d" Background="White">
 
-    
+
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <Grid>
@@ -329,13 +329,17 @@
 
 
 
-                    <Grid >
-                        <Grid.ColumnDefinitions>
+                    <Grid  Margin="2">
+                        <Grid.ColumnDefinitions   >
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="50"/>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="50"/>
                         </Grid.ColumnDefinitions>
                         <Label>n__iter__susp__B</Label>
-                        <TextBox Text="1" x:Name="numberOfIterSuspB" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" ></TextBox>
+                        <TextBox Text="1" x:Name="numberOfIterSuspB" PreviewTextInput="TextBox_PreviewNumbersOnly" Grid.ColumnSpan="3" Margin="80,0,83,0" TextChanged="numberOfIterSuspB_TextChanged" />
+                        <Label  Grid.Column="2">D__IC__dec__rate</Label>
+                        <TextBox Text="0.1" x:Name="numberDicDecRate" Grid.Column="3" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="numberDicDecRate_TextChanged"></TextBox>
                     </Grid>
 
                     <Label FontWeight="Bold">Risk__accept__level (IQ)</Label>
@@ -361,7 +365,7 @@
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
-                            <Label  FontWeight="Bold" Width="50" Content="IQ &lt;" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <Label  FontWeight="Bold" Width="50" Content="IQ1 &lt;" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             <TextBox x:Name="iqLevelLessThan" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="iqLevelLessThan_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="95" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
 
@@ -369,7 +373,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
-                            <Label  Content="IQ" HorizontalAlignment="Center" VerticalAlignment="Center"  />
+                            <Label  Content="IQ2" HorizontalAlignment="Center" VerticalAlignment="Center"  />
 
                         </Grid>
 
@@ -378,7 +382,7 @@
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
-                            <Label FontWeight="Bold"  Width="50" Content="IQ &gt;" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <Label FontWeight="Bold"  Width="50" Content="IQ3 &gt;" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             <TextBox x:Name="iqLevelGreaterThan" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="iqLevelGreaterThan_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="125" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Grid>
 
@@ -899,7 +903,7 @@
             </Grid>
 
             <Grid Grid.Column="1">
-           
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
