@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Win32;
@@ -24,7 +15,6 @@ namespace ASIapp
     {
         private MainWindow _mainWindow;
         string currentDirectory = Directory.GetCurrentDirectory();
-
 
         #region First Section
 
@@ -134,6 +124,7 @@ namespace ASIapp
         #region Rectangle and mesh
         List<RectangleModel> rectList;
         #endregion
+
         public FirstPageWindow(MainWindow window)
         {
             InitializeComponent();
@@ -142,7 +133,6 @@ namespace ASIapp
             rectList = new List<RectangleModel>();
 
         }
-
 
         private void DrawMesh()
         {
@@ -208,14 +198,12 @@ namespace ASIapp
                 rect.Rectangle.Fill = Brushes.Orange;
             }
         }
+
         private void UpdateMesh()
         {
             
             DrawMesh();
         }
-
-      
-
 
         private void TextBox_PreviewNumbersOnly(object sender, TextCompositionEventArgs e)
         {
@@ -228,7 +216,6 @@ namespace ASIapp
                 e.Handled = true;
             }
         }
-
 
         private void NumberOfRows_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -337,6 +324,7 @@ namespace ASIapp
             }
 
         }
+
         private void UpdateRadioButtonStatus(RadioButton radioButton, bool isSuccess)
         {
             if (radioButton != null)
@@ -349,7 +337,6 @@ namespace ASIapp
         {
             return System.IO.Path.GetFileName(filePath);
         }
-
 
         private void Btn_readCaStates_Click(object sender, RoutedEventArgs e)
         {
@@ -376,7 +363,6 @@ namespace ASIapp
             }
             UpdateRadioButtonStatus(rbtn_readCaStates,true);
         }
-
 
         private void Btn_readAProfile_Click(object sender, RoutedEventArgs e)
         {
@@ -433,7 +419,6 @@ namespace ASIapp
 
         }
 
-
         private void CheckBoxDebug_Checked(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = (CheckBox)sender;
@@ -472,8 +457,6 @@ namespace ASIapp
                 test_3.IsChecked = false;
             }
         }
-
-
 
         private void RbtnCustomSeed_Checked(object sender, RoutedEventArgs e)
         {
@@ -571,7 +554,6 @@ namespace ASIapp
             }
         }
 
-
         private void UpdateParameterInt(object sender, ref int parameter)
         {
             try
@@ -592,7 +574,6 @@ namespace ASIapp
             }
         }
 
-
         private void iqLevelGreaterThan_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref iqGtThan);
@@ -602,10 +583,6 @@ namespace ASIapp
         {
             UpdateParameterInt(sender, ref iqLeThan);
         }
-
-      
-
-      
 
         private void thrB1_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -701,6 +678,7 @@ namespace ASIapp
         {
             UpdateParameterInt(sender, ref pHS1);
         }
+
         private void probabilityHS2_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref pHS2);
@@ -710,7 +688,6 @@ namespace ASIapp
         {
             UpdateParameterInt(sender, ref pHS3);
         }
-
 
         private void probabilityIll1_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -727,8 +704,6 @@ namespace ASIapp
             UpdateParameterInt(sender, ref pIll3);
         }
 
-
-
         private void iqMax_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref maxIqRange);
@@ -737,13 +712,11 @@ namespace ASIapp
         private void iqMin_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref minIqRange);
-
         }
 
         private void Btn_run_Click(object sender, RoutedEventArgs e)
         {
            UpdateMesh();
- 
         }
 
         private void numberDicDecRate_TextChanged(object sender, TextChangedEventArgs e)

@@ -1,14 +1,6 @@
-﻿using System.IO;
-using System.Text;
+﻿using System.Globalization;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ASIapp
 {
@@ -18,6 +10,7 @@ namespace ASIapp
     public partial class MainWindow : Window
     {
         public FirstPageWindow FirstPageWindow;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -27,10 +20,10 @@ namespace ASIapp
 
             ViewControl.Content = FirstPageWindow.Content;
 
-            System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+            CultureInfo customCulture = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
             customCulture.NumberFormat.NumberDecimalSeparator = ".";
 
-            System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+            Thread.CurrentThread.CurrentCulture = customCulture;
 
         }
 
@@ -59,16 +52,6 @@ namespace ASIapp
             {
                 Directory.CreateDirectory("RESULTS/DEBUG");
             }
-
-
-
-
-
         }
-
-
-
     }
-
-
 }
