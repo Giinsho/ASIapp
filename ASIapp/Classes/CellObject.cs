@@ -10,5 +10,17 @@ namespace ASIapp.Classes
     {
         public int ID { get; set; }
         public int GLOBAL_ID { get; set; }
+
+        public CellObject()
+        {
+
+        }
+
+
+
+        public CellObject(int n_of_col,int col, int row)
+        {
+            GLOBAL_ID = n_of_col * (row - 1) + col;
+        }
     }
 }

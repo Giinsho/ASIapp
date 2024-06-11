@@ -5,6 +5,9 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Win32;
+using ASIapp.Classes;
+using ASIapp.Classes.Agent;
+using ASIapp.Classes.Businesses;
 
 namespace ASIapp
 {
@@ -13,116 +16,132 @@ namespace ASIapp
     /// </summary>
     public partial class FirstPageWindow : UserControl
     {
-        private MainWindow _mainWindow;
+
+
+        public MainWindow _mainWindow;
         string currentDirectory = Directory.GetCurrentDirectory();
+
+        #region Additional data
+
+        private List<Agent> agents = new List<Agent>();
+        private List<Business> businesses = new List<Business>();
+        private List<Disease> diseases = new List<Disease>();
+   
+
+
+        #endregion
 
         #region First Section
 
-        private int numberOfRows;
-        private int numberOfColumns;
+        public int numberOfRows;
+        public int numberOfColumns;
 
-        private int numberOfA;
-        private int numberOfD;
-        private int numberOfB;
+        public int numberOfA;
+        public int numberOfD;
+        public int numberOfB;
 
-        private string caStateFile;
-        private string aProfileFile;
-        private string randNumFile;
+        public string caStateFile;
+        public string aProfileFile;
+        public string randNumFile;
 
-        private int numberOfIterations;
-        private int numberOfExperience;
+        public int numberOfIterations;
+        public int numberOfExperience;
 
-        private bool isTest1Selected;
-        private bool isTest2Selected;
-        private bool isTest3Selected;
+        public bool isTest1Selected;
+        public bool isTest2Selected;
+        public bool isTest3Selected;
 
 
-        private bool isClockSeedSelected;
-        private bool isCustomSeedSelected;
+        public bool isClockSeedSelected;
+        public bool isCustomSeedSelected;
 
-        private int seed;
+        public int seed;
 
-        private int initCapitIc;
+        public int initCapitIc;
 
-        private bool isDebug;
+        public bool isDebug;
 
         #endregion
 
         #region Parameters of A
 
-        private int minIqRange;
-        private int maxIqRange;
+        public int minIqRange;
+        public int maxIqRange;
 
         #endregion
 
         #region Health State
 
-        private int pHS1;
-        private int pHS2;
-        private int pHS3;
+        public double pHS1;
+        public double pHS2;
+        public double pHS3;
 
-        private int pIll1;
-        private int pIll2;
-        private int pIll3;
+        public double pIll1;
+        public double pIll2;
+        public double pIll3;
 
-        private int numberIterSuspB;
-        private double numberDecRate; 
+        public int numberIterSuspB;
+        public double numberDecRate; 
 
         #endregion
 
         #region Risk accept level (IQ col)
 
-        private int iqLeThan;
-        private int iqGtThan;
+        public int iqLeThan;
+        public int iqGtThan;
 
-        private double pAccB11;
-        private double pAccB12;
-        private double pAccB13;
+        public double pAccB11;
+        public double pAccB12;
+        public double pAccB13;
 
-        private double pAccB21;
-        private double pAccB22;
-        private double pAccB23;
+        public double pAccB21;
+        public double pAccB22;
+        public double pAccB23;
 
-        private double pAccB31;
-        private double pAccB32;
-        private double pAccB33;
+        public double pAccB31;
+        public double pAccB32;
+        public double pAccB33;
 
         #endregion
 
+        public double pmob1;
+        public double pmob2;
+        public double pmob3;
+
         #region Mobility (IQ - col )
 
-        private double thrB1_val;
-        private double thrB2_val;
-        private double thrB3_val;
+        public double thrB1_val;
+        public double thrB2_val;
+        public double thrB3_val;
 
-        private double inv_a_B1_val;
-        private double inv_a_B2_val;
-        private double inv_a_B3_val;
+        public double inv_a_B1_val;
+        public double inv_a_B2_val;
+        public double inv_a_B3_val;
 
-        private int increase_of_GapB1;
-        private int increase_of_GapB2;
-        private int increase_of_GapB3;
+        public int increase_of_GapB1;
+        public int increase_of_GapB2;
+        public int increase_of_GapB3;
 
-        private double pRiskB1;
-        private double pRiskB2;
-        private double pRiskB3;
+        public double pRiskB1;
+        public double pRiskB2;
+        public double pRiskB3;
 
-        private double pAvailB1;
-        private double pAvailB2;
-        private double pAvailB3;
+        public double pAvailB1;
+        public double pAvailB2;
+        public double pAvailB3;
 
         #endregion
 
         #region Wealth thr
 
-        private int wealth_pooper;
-        private int wealth_feasible;
-        private int wealth_rich;
+        public int wealth_pooper;
+        public int wealth_feasible;
+        public int wealth_rich;
 
         #endregion
 
         #region Rectangle and mesh
-        List<RectangleModel> rectList;
+        public List<RectangleModel> rectList;
         #endregion
 
         public FirstPageWindow(MainWindow window)
@@ -134,7 +153,7 @@ namespace ASIapp
 
         }
 
-        private void DrawMesh()
+        public void DrawMesh()
         {
             rectList.Clear();
             myCanvas.Children.Clear();
@@ -186,7 +205,7 @@ namespace ASIapp
 
         }
 
-        private void ColorCellsAsAgents()
+        public void ColorCellsAsAgents()
         {
             var random = new Random();
             var numberOfAgents = numberOfA;
@@ -199,13 +218,13 @@ namespace ASIapp
             }
         }
 
-        private void UpdateMesh()
+        public void UpdateMesh()
         {
             
             DrawMesh();
         }
 
-        private void TextBox_PreviewNumbersOnly(object sender, TextCompositionEventArgs e)
+        public void TextBox_PreviewNumbersOnly(object sender, TextCompositionEventArgs e)
         {
             if (!char.IsDigit(e.Text, 0) &&
                 e.Text != "." &&
@@ -217,7 +236,7 @@ namespace ASIapp
             }
         }
 
-        private void NumberOfRows_TextChanged(object sender, TextChangedEventArgs e)
+        public void NumberOfRows_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
@@ -231,7 +250,7 @@ namespace ASIapp
             }
         }
 
-        private void NumberOfColumns_TextChanged(object sender, TextChangedEventArgs e)
+        public void NumberOfColumns_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
@@ -245,7 +264,7 @@ namespace ASIapp
             }
         }
 
-        private void NumberOfA_TextChanged(object sender, TextChangedEventArgs e)
+        public void NumberOfA_TextChanged(object sender, TextChangedEventArgs e)
         {
 
             try
@@ -261,7 +280,7 @@ namespace ASIapp
             }
         }
 
-        private void NumberOfD_TextChanged(object sender, TextChangedEventArgs e)
+        public void NumberOfD_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
@@ -277,7 +296,7 @@ namespace ASIapp
 
         }
 
-        private void NumberOfB_TextChanged(object sender, TextChangedEventArgs e)
+        public void NumberOfB_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
@@ -293,7 +312,7 @@ namespace ASIapp
 
         }
 
-        private void NumberOfiter_TextChanged(object sender, TextChangedEventArgs e)
+        public void NumberOfiter_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
@@ -309,7 +328,7 @@ namespace ASIapp
 
         }
 
-        private void NumberOfexper_TextChanged(object sender, TextChangedEventArgs e)
+        public void NumberOfexper_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
@@ -325,7 +344,7 @@ namespace ASIapp
 
         }
 
-        private void UpdateRadioButtonStatus(RadioButton radioButton, bool isSuccess)
+        public void UpdateRadioButtonStatus(RadioButton radioButton, bool isSuccess)
         {
             if (radioButton != null)
             {
@@ -338,7 +357,7 @@ namespace ASIapp
             return System.IO.Path.GetFileName(filePath);
         }
 
-        private void Btn_readCaStates_Click(object sender, RoutedEventArgs e)
+        public void Btn_readCaStates_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
@@ -349,11 +368,12 @@ namespace ASIapp
                 try
                 {
                     string fileName = openFileDialog.FileName;
-                    caStateFile = GetFileNameFromPath(fileName);
+                    caStateFile = GetFileNameFromPath(fileName+"/CA_STATES");
                     string[] fileLines = File.ReadAllLines(fileName);
                     for (int i = 1; i < fileLines.Length; i++)
                     {
                         Console.WriteLine(fileLines[i]);
+
                     }
                 }
                 catch (Exception ex)
@@ -364,7 +384,7 @@ namespace ASIapp
             UpdateRadioButtonStatus(rbtn_readCaStates,true);
         }
 
-        private void Btn_readAProfile_Click(object sender, RoutedEventArgs e)
+        public void Btn_readAProfile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
@@ -375,7 +395,7 @@ namespace ASIapp
                 try
                 {
                     string fileName = openFileDialog.FileName;
-                    aProfileFile = GetFileNameFromPath(fileName);
+                    aProfileFile = GetFileNameFromPath(fileName + "/A_PROFILE");
                     string[] fileLines = File.ReadAllLines(fileName);
                     for (int i = 1; i < fileLines.Length; i++)
                     {
@@ -391,19 +411,18 @@ namespace ASIapp
 
         }
 
-        private void Btn_ReadRandNum_Click(object sender, RoutedEventArgs e)
+        public void Btn_ReadRandNum_Click(object sender, RoutedEventArgs e)
         {
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             openFileDialog.InitialDirectory = System.IO.Path.Combine(Environment.CurrentDirectory, "");
-
-            if (openFileDialog.ShowDialog() == true)
+            
             {
                 try
                 {
                     string fileName = openFileDialog.FileName;
-                    randNumFile = GetFileNameFromPath(fileName);
+                    randNumFile = GetFileNameFromPath(fileName + "/RAND_NUM");
                     string[] fileLines = File.ReadAllLines(fileName);
                     for (int i = 1; i < fileLines.Length; i++)
                     {
@@ -419,14 +438,14 @@ namespace ASIapp
 
         }
 
-        private void CheckBoxDebug_Checked(object sender, RoutedEventArgs e)
+        public void CheckBoxDebug_Checked(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = (CheckBox)sender;
             isDebug = checkBox.IsChecked ?? false; 
 
         }
 
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        public void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             RadioButton radioButton = (RadioButton)sender;
 
@@ -458,7 +477,7 @@ namespace ASIapp
             }
         }
 
-        private void RbtnCustomSeed_Checked(object sender, RoutedEventArgs e)
+        public void RbtnCustomSeed_Checked(object sender, RoutedEventArgs e)
         {
 
             CustomSeedText.IsEnabled = true;
@@ -469,7 +488,7 @@ namespace ASIapp
             
         }
 
-        private void RbtnClockSeed_Checked(object sender, RoutedEventArgs e)
+        public void RbtnClockSeed_Checked(object sender, RoutedEventArgs e)
         {
        
             CustomSeedText.IsEnabled = false;
@@ -478,63 +497,63 @@ namespace ASIapp
             CustomSeedText.Clear();
         }
 
-        private void CustomSeedText_TextChanged(object sender, TextChangedEventArgs e)
+        public void CustomSeedText_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref seed);
         }
 
-        private void InitCapitIC_TextChanged(object sender, RoutedEventArgs e)
+        public void InitCapitIC_TextChanged(object sender, RoutedEventArgs e)
         {
             UpdateParameterInt(sender, ref initCapitIc);
 
         }
 
-        private void paccB11_TextChanged(object sender, TextChangedEventArgs e)
+        public void paccB11_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref pAccB11);
         }
 
-        private void paccB12_TextChanged(object sender, TextChangedEventArgs e)
+        public void paccB12_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref pAccB12);
         }
 
-        private void paccB13_TextChanged(object sender, TextChangedEventArgs e)
+        public void paccB13_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref pAccB13);
         }
 
-        private void paccB21_TextChanged(object sender, TextChangedEventArgs e)
+        public void paccB21_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref pAccB21);
         }
 
-        private void paccB22_TextChanged(object sender, TextChangedEventArgs e)
+        public void paccB22_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref pAccB22);
         }
 
-        private void paccB23_TextChanged(object sender, TextChangedEventArgs e)
+        public void paccB23_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref pAccB23);
         }
 
-        private void paccB31_TextChanged(object sender, TextChangedEventArgs e)
+        public void paccB31_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref pAccB31);
         }
 
-        private void paccB32_TextChanged(object sender, TextChangedEventArgs e)
+        public void paccB32_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref pAccB32);
         }
 
-        private void paccB33_TextChanged(object sender, TextChangedEventArgs e)
+        public void paccB33_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref pAccB33);
         }
 
-        private void UpdateParameterDouble(object sender, ref double parameter)
+        public void UpdateParameterDouble(object sender, ref double parameter)
         {
             try
             {
@@ -554,7 +573,7 @@ namespace ASIapp
             }
         }
 
-        private void UpdateParameterInt(object sender, ref int parameter)
+        public void UpdateParameterInt(object sender, ref int parameter)
         {
             try
             {
@@ -574,157 +593,175 @@ namespace ASIapp
             }
         }
 
-        private void iqLevelGreaterThan_TextChanged(object sender, TextChangedEventArgs e)
+        public void iqLevelGreaterThan_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref iqGtThan);
         }
 
-        private void iqLevelLessThan_TextChanged(object sender, TextChangedEventArgs e)
+        public void iqLevelLessThan_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref iqLeThan);
         }
 
-        private void thrB1_TextChanged(object sender, TextChangedEventArgs e)
+        public void thrB1_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref thrB1_val);
         }
 
-        private void thrB2_TextChanged(object sender, TextChangedEventArgs e)
+        public void thrB2_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref thrB2_val);
         }
 
-        private void thrB3_TextChanged(object sender, TextChangedEventArgs e)
+        public void thrB3_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref thrB3_val);
         }
 
-        private void inv_a_B1_TextChanged(object sender, TextChangedEventArgs e)
+        public void inv_a_B1_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref inv_a_B1_val);
         }
 
-        private void inv_a_B2_TextChanged(object sender, TextChangedEventArgs e)
+        public void inv_a_B2_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref inv_a_B2_val);
         }
 
-        private void inv_a_B3_TextChanged(object sender, TextChangedEventArgs e)
+        public void inv_a_B3_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref inv_a_B3_val);
         }
 
-        private void increase_of_gap_B1_TextChanged(object sender, TextChangedEventArgs e)
+        public void increase_of_gap_B1_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref increase_of_GapB1);
         }
 
-        private void increase_of_gap_B2_TextChanged(object sender, TextChangedEventArgs e)
+        public void increase_of_gap_B2_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref increase_of_GapB2);
         }
 
-        private void increase_of_gap_B3_TextChanged(object sender, TextChangedEventArgs e)
+        public void increase_of_gap_B3_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref increase_of_GapB3);
         }
 
-        private void p_risk_B1_TextChanged(object sender, TextChangedEventArgs e)
+        public void p_risk_B1_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender,ref pRiskB1);
         }
 
-        private void p_risk_B2_TextChanged(object sender, TextChangedEventArgs e)
+        public void p_risk_B2_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender,ref pRiskB2);
         }
 
-        private void p_risk_B3_TextChanged(object sender, TextChangedEventArgs e)
+        public void p_risk_B3_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender,ref pRiskB3);
         }
 
-        private void p_avail_B1_TextChanged(object sender, TextChangedEventArgs e)
+        public void p_avail_B1_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender,ref pAvailB1);
         }
 
-        private void p_avail_B2_TextChanged(object sender, TextChangedEventArgs e)
+        public void p_avail_B2_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender,ref pAvailB2);
         }
 
-        private void p_avail_B3_TextChanged(object sender, TextChangedEventArgs e)
+        public void p_avail_B3_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref pAvailB3);
         }
 
-        private void thr_pooper_TextChanged(object sender, TextChangedEventArgs e)
+
+        public void pmob1_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterDouble(sender, ref pmob1);
+        }
+
+        public void pmob2_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterDouble(sender, ref pmob2);
+        }
+
+
+        public void pmob3_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterDouble(sender, ref pmob3);
+        }
+
+
+        public void thr_pooper_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref wealth_pooper);
         }
 
-        private void thr_rich_TextChanged(object sender, TextChangedEventArgs e)
+        public void thr_rich_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref wealth_feasible);
         }
 
-        private void thr_feasible_TextChanged(object sender, TextChangedEventArgs e)
+        public void thr_feasible_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref wealth_rich);
         }
 
-        private void probabilityHS1_TextChanged(object sender, TextChangedEventArgs e)
+        public void probabilityHS1_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateParameterInt(sender, ref pHS1);
+            UpdateParameterDouble(sender, ref pHS1);
         }
 
-        private void probabilityHS2_TextChanged(object sender, TextChangedEventArgs e)
+        public void probabilityHS2_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateParameterInt(sender, ref pHS2);
+            UpdateParameterDouble(sender, ref pHS2);
         }
 
-        private void probabilityHS3_TextChanged(object sender, TextChangedEventArgs e)
+        public void probabilityHS3_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateParameterInt(sender, ref pHS3);
+            UpdateParameterDouble(sender, ref pHS3);
         }
 
-        private void probabilityIll1_TextChanged(object sender, TextChangedEventArgs e)
+        public void probabilityIll1_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateParameterInt(sender, ref pIll1);
+            UpdateParameterDouble(sender, ref pIll1);
         }
 
-        private void probabilityIll2_TextChanged(object sender, TextChangedEventArgs e)
+        public void probabilityIll2_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateParameterInt(sender, ref pIll2);
+            UpdateParameterDouble(sender, ref pIll2);
         }
 
-        private void probabilityIll3_TextChanged(object sender, TextChangedEventArgs e)
+        public void probabilityIll3_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateParameterInt(sender, ref pIll3);
+            UpdateParameterDouble(sender, ref pIll3);
         }
 
-        private void iqMax_TextChanged(object sender, TextChangedEventArgs e)
+        public void iqMax_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref maxIqRange);
         }
 
-        private void iqMin_TextChanged(object sender, TextChangedEventArgs e)
+        public void iqMin_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref minIqRange);
         }
 
-        private void Btn_run_Click(object sender, RoutedEventArgs e)
+        public void Btn_run_Click(object sender, RoutedEventArgs e)
         {
            UpdateMesh();
         }
 
-        private void numberDicDecRate_TextChanged(object sender, TextChangedEventArgs e)
+        public void numberDicDecRate_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterDouble(sender, ref numberDecRate);
         }
 
-        private void numberOfIterSuspB_TextChanged(object sender, TextChangedEventArgs e)
+        public void numberOfIterSuspB_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref numberIterSuspB);
         }

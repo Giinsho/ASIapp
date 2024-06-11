@@ -27,7 +27,7 @@ namespace ASIapp
 
         }
 
-        private void CreateFolders()
+        public void CreateFolders()
         {
             if (!Directory.Exists("CA_STATES"))
             {
