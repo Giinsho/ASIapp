@@ -562,10 +562,7 @@ namespace ASIapp
                 {
                     parameter = newValue;
                 }
-                else
-                {
-                    MessageBox.Show("Invalid input. Please enter a valid number.");
-                }
+          
             }
             catch (Exception ex)
             {
@@ -581,10 +578,6 @@ namespace ASIapp
                 if (int.TryParse(textBox.Text, out int newValue))
                 {
                     parameter = newValue;
-                }
-                else
-                {
-                    MessageBox.Show("Invalid input. Please enter a valid number.");
                 }
             }
             catch (Exception ex)
