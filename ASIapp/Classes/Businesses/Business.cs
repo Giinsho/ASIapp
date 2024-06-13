@@ -7,65 +7,52 @@ using System.Threading.Tasks;
 namespace ASIapp.Classes.Businesses
 {
     using static Util;
-    public abstract class Business : CellObject
+    public class Business : CellObject
     {
 
+        public double IC_THR { get; set; }
+        public double INV_A { get; set; }
+        public int CAP_INC { get; set; }
+        public double P_RISE { get; set; }
+        public double AVAIL { get; set;  }
         public enum B_TYPE
         {
             Business1,
             Business2,
             Business3
         }
-
-        public double IC_THR { get; set; }
-        public double INV_A { get; set; }
-        public int CAP_INC { get; set; }
-        public double P_RISE { get; set; }
-
-        private Dictionary<B_TYPE, List<double>> Values = new()
+        
+        public Business(B_TYPE bType)
         {
-            {B_TYPE.Business1, new List<double>
-                    { (double) ThrB1Val,
-                (double) InvAB1Val,
-                (int) IncreaseOfGapB1,
-                (double) PRiskB1,
-                (double) PAvailB1,
+            if (bType == B_TYPE.Business1)
+            {
+                IC_THR =  (double)ThrB1Val;
+                INV_A =  (double)InvAB1Val;
+                CAP_INC =  (int)IncreaseOfGapB1;
+                P_RISE =  (double)PRiskB1;
+;               AVAIL = (double)PAvailB1;
+            }
+
+            if (bType == B_TYPE.Business2)
+            {
+                IC_THR = (double)ThrB2Val;
+                INV_A = (double)InvAB2Val;
+                CAP_INC = (int)IncreaseOfGapB2;
+                P_RISE = (double)PRiskB2;
+                AVAIL = (double)PAvailB1 + (double)PAvailB2;
+            }
+
+            if (bType == B_TYPE.Business3)
+            {
+                IC_THR = (double)ThrB3Val;
+                INV_A = (double)InvAB3Val;
+                CAP_INC = (int)IncreaseOfGapB3;
+                P_RISE = (double)PRiskB3;
+                AVAIL = (double)PAvailB1 + (double)PAvailB2 + (double)PAvailB3;
+            }
 
 
-                    }
-                },
-            {B_TYPE.Business2, new List<double>
-                { (double) ThrB2Val,
-                    (double) InvAB2Val,
-                    (int) IncreaseOfGapB2,
-                    (double) PRiskB2,
-                    (double) PAvailB1 + (double) PAvailB2,
-
-
-                }
-            },
-            {B_TYPE.Business3, new List<double>
-                { (double) ThrB3Val,
-                    (double) InvAB3Val,
-                    (int) IncreaseOfGapB3,
-                    (double) PRiskB3,
-                    (double) PAvailB1 + (double) PAvailB2 + (double) PAvailB3,
-
-
-                }
-            },
-        };
-
-        protected Business()
-        {
-            B_TYPE type = (B_TYPE)Enum.Parse(typeof(B_TYPE), GetType().Name);
-
-            IC_THR = Values[type][0];
-            INV_A = Values[type][1];
-            CAP_INC = (int)Values[type][2];
-            P_RISE = Values[type][3];
         }
-
 
 
     }

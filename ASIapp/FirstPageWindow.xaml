@@ -337,7 +337,7 @@
                             <ColumnDefinition Width="50"/>
                         </Grid.ColumnDefinitions>
                         <Label>n__iter__susp__B</Label>
-                        <TextBox Text="1" x:Name="numberOfIterSuspB" PreviewTextInput="TextBox_PreviewNumbersOnly" Grid.ColumnSpan="3" Margin="80,0,83,0" TextChanged="numberOfIterSuspB_TextChanged" />
+                        <TextBox Text="1" x:Name="numberOfIterSuspB" PreviewTextInput="TextBox_PreviewNumbersOnly" Grid.ColumnSpan="3" Margin="80,0,83,0" TextChanged="numberOfIterSuspB_TextChanged" Height="26" VerticalAlignment="Top" />
                         <Label  Grid.Column="2">D__IC__dec__rate</Label>
                         <TextBox Text="0.1" x:Name="numberDicDecRate" Grid.Column="3" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="numberDicDecRate_TextChanged"></TextBox>
                     </Grid>

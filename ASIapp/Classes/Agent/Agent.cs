@@ -16,7 +16,7 @@ namespace ASIapp.Classes.Agent
         public double MOBILITY { get; set; }
         public double CAPITAL { get; set; }
 
-        public static double INIT_CAPITAL;
+        public double INIT_CAPITAL;
 
         public WealthState WealthState = WealthState.Poor;
 
@@ -59,6 +59,8 @@ namespace ASIapp.Classes.Agent
             MOBILITY = MobilityThresholds[IQ_STATE];
 
             CAPITAL = INIT_CAPITAL;
+
+            DISEASE = DiseaseThresholds[H_STATE];
 
         }
 

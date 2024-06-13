@@ -30,6 +30,7 @@ namespace ASIapp
 
 
         public static Random Random;
+
         public static int NumberOfRows { get => _firstPageWindow.numberOfRows; set => _firstPageWindow.numberOfRows = value; }
         public static int NumberOfColumns { get => _firstPageWindow.numberOfColumns; set => _firstPageWindow.numberOfColumns = value; }
         public static int NumberOfA { get => _firstPageWindow.numberOfA; set => _firstPageWindow.numberOfA = value; }

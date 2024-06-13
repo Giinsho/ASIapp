@@ -17,6 +17,9 @@ namespace ASIapp.Classes
 
         }
 
+
+
+
         public CellObject(int n_of_col,int col, int row)
         {
             GLOBAL_ID = CalculateGlobalID(n_of_col, col, row);

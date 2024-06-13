@@ -8,9 +8,12 @@ using Microsoft.Win32;
 using ASIapp.Classes;
 using ASIapp.Classes.Agent;
 using ASIapp.Classes.Businesses;
+using System;
 
 namespace ASIapp
 {
+
+    using static Util;
     /// <summary>
     /// Interaction logic for FirstPageWindow.xaml
     /// </summary>
@@ -147,9 +150,10 @@ namespace ASIapp
         public FirstPageWindow(MainWindow window)
         {
             InitializeComponent();
-
+          
             _mainWindow = window;
             rectList = new List<RectangleModel>();
+            Initialize(this);
 
         }
 
@@ -230,121 +234,72 @@ namespace ASIapp
             }
         }
 
-        public void NumberOfRows_TextChanged(object sender, TextChangedEventArgs e)
+      
+
+      
+
+        public void Btn_run_Click(object sender, RoutedEventArgs e)
         {
-            try
+
+
+            Random = isCustomSeedSelected == true ? new Random(seed) : new Random();
+       
+     
+            insertAgents();
+            insertBusinesses();
+            ///insert d to canvas
+            UpdateMesh();
+        }
+
+        private void insertBusinesses()
+        {
+            var rand = new Random();
+            for (int i = 1; i <= numberOfB; i++)
             {
-                int.TryParse(NumberOfRows.Text, out int newValue);
-                numberOfRows = newValue;
-          
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error parsing value: {ex.Message}");
+                bool freeSpace = false;
+                var randCol = 0;
+                var randRow = 0;
+                while (!freeSpace)
+                {
+                    randCol = rand.Next(1, numberOfColumns);
+                    randRow = rand.Next(1, numberOfRows);
+                    freeSpace = !agents.Any(x => x.DecalculateGlobalID(numberOfColumns, numberOfRows).Equals(new System.Drawing.Point(randCol, randRow)));
+                }
+
+
+                var randomType = (Business.B_TYPE)Random.Next(0, Enum.GetNames(typeof(Business.B_TYPE)).Length);
+                var business = new Business(randomType) { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow) };
+                businesses.Add(business);
+
+
             }
         }
 
-        public void NumberOfColumns_TextChanged(object sender, TextChangedEventArgs e)
+        private void insertAgents()
         {
-            try
+            var rand = new Random();
+            for(int i = 1; i <= numberOfA; i++)
             {
-                int.TryParse(NumberOfColumns.Text, out int newValue);
-                numberOfColumns = newValue;
-           
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error parsing value: {ex.Message}");
+                bool freeSpace = false;
+                var randCol = 0;
+                var randRow = 0;
+                while (!freeSpace)
+                {
+                    randCol = rand.Next(1, numberOfColumns);
+                    randRow = rand.Next(1, numberOfRows);
+                    freeSpace = !agents.Any(x => x.DecalculateGlobalID(numberOfColumns, numberOfRows).Equals(new System.Drawing.Point(randCol, randRow)));
+                }
+                
+                var agent = new Agent() { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow),  };
+                agent.CAPITAL = initCapitIc;
+                agent.INIT_CAPITAL = initCapitIc;
+                agents.Add(agent);
             }
         }
 
-        public void NumberOfA_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-            try
-            {
-                int.TryParse(NumberOfA.Text, out int newValue);
-                numberOfA= newValue;
 
 
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error parsing value: {ex.Message}");
-            }
-        }
 
-        public void NumberOfD_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                int.TryParse(NumberOfD.Text, out int newValue);
-                numberOfD = newValue;
-
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error parsing value: {ex.Message}");
-            }
-
-        }
-
-        public void NumberOfB_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                int.TryParse(NumberOfB.Text, out int newValue);
-                numberOfB = newValue;
-
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error parsing value: {ex.Message}");
-            }
-
-        }
-
-        public void NumberOfiter_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                int.TryParse(NumberOfiter.Text, out int newValue);
-                numberOfIterations = newValue;
-
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error parsing value: {ex.Message}");
-            }
-
-        }
-
-        public void NumberOfexper_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                int.TryParse(NumberOfexper.Text, out int newValue);
-                numberOfExperience = newValue;
-
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error parsing value: {ex.Message}");
-            }
-
-        }
-
-        public void UpdateRadioButtonStatus(RadioButton radioButton, bool isSuccess)
-        {
-            if (radioButton != null)
-            {
-                radioButton.IsChecked = isSuccess;
-            }
-        }
 
         static string GetFileNameFromPath(string filePath)
         {
@@ -362,7 +317,7 @@ namespace ASIapp
                 try
                 {
                     string fileName = openFileDialog.FileName;
-                    caStateFile = GetFileNameFromPath(fileName+"/CA_STATES");
+                    caStateFile = GetFileNameFromPath(fileName + "/CA_STATES");
                     string[] fileLines = File.ReadAllLines(fileName);
                     for (int i = 1; i < fileLines.Length; i++)
                     {
@@ -375,7 +330,7 @@ namespace ASIapp
                     MessageBox.Show($"Error reading file: {ex.Message}");
                 }
             }
-            UpdateRadioButtonStatus(rbtn_readCaStates,true);
+            UpdateRadioButtonStatus(rbtn_readCaStates, true);
         }
 
         public void Btn_readAProfile_Click(object sender, RoutedEventArgs e)
@@ -411,7 +366,7 @@ namespace ASIapp
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             openFileDialog.InitialDirectory = System.IO.Path.Combine(Environment.CurrentDirectory, "");
-            
+
             {
                 try
                 {
@@ -432,10 +387,58 @@ namespace ASIapp
 
         }
 
+
+        public void NumberOfRows_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterInt(sender, ref numberOfRows);
+        }
+
+        public void NumberOfColumns_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterInt(sender, ref numberOfColumns);
+        }
+
+        public void NumberOfA_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+            UpdateParameterInt(sender, ref numberOfA);
+        }
+
+        public void NumberOfD_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterInt(sender, ref numberOfD);
+
+        }
+
+        public void NumberOfB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterInt(sender, ref numberOfB);
+
+        }
+
+        public void NumberOfiter_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterInt(sender, ref numberOfIterations);
+
+        }
+
+        public void NumberOfexper_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterInt(sender, ref numberOfExperience);
+        }
+
+        public void UpdateRadioButtonStatus(RadioButton radioButton, bool isSuccess)
+        {
+            if (radioButton != null)
+            {
+                radioButton.IsChecked = isSuccess;
+            }
+        }
+
         public void CheckBoxDebug_Checked(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = (CheckBox)sender;
-            isDebug = checkBox.IsChecked ?? false; 
+            isDebug = checkBox.IsChecked ?? false;
 
         }
 
@@ -476,18 +479,18 @@ namespace ASIapp
 
             CustomSeedText.IsEnabled = true;
 
-   
+
             RbtnClockSeed.IsChecked = false;
 
-            
+
         }
 
         public void RbtnClockSeed_Checked(object sender, RoutedEventArgs e)
         {
-       
+
             CustomSeedText.IsEnabled = false;
 
-         
+
             CustomSeedText.Clear();
         }
 
@@ -556,7 +559,7 @@ namespace ASIapp
                 {
                     parameter = newValue;
                 }
-          
+
             }
             catch (Exception ex)
             {
@@ -579,6 +582,18 @@ namespace ASIapp
                 MessageBox.Show($"Error parsing value: {ex.Message}");
             }
         }
+
+
+        public void numberDicDecRate_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterDouble(sender, ref numberDecRate);
+        }
+
+        public void numberOfIterSuspB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterInt(sender, ref numberIterSuspB);
+        }
+
 
         public void iqLevelGreaterThan_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -637,27 +652,27 @@ namespace ASIapp
 
         public void p_risk_B1_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateParameterDouble(sender,ref pRiskB1);
+            UpdateParameterDouble(sender, ref pRiskB1);
         }
 
         public void p_risk_B2_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateParameterDouble(sender,ref pRiskB2);
+            UpdateParameterDouble(sender, ref pRiskB2);
         }
 
         public void p_risk_B3_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateParameterDouble(sender,ref pRiskB3);
+            UpdateParameterDouble(sender, ref pRiskB3);
         }
 
         public void p_avail_B1_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateParameterDouble(sender,ref pAvailB1);
+            UpdateParameterDouble(sender, ref pAvailB1);
         }
 
         public void p_avail_B2_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateParameterDouble(sender,ref pAvailB2);
+            UpdateParameterDouble(sender, ref pAvailB2);
         }
 
         public void p_avail_B3_TextChanged(object sender, TextChangedEventArgs e)
@@ -736,66 +751,6 @@ namespace ASIapp
         public void iqMin_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateParameterInt(sender, ref minIqRange);
-        }
-
-        public void Btn_run_Click(object sender, RoutedEventArgs e)
-        {
-            insertAgents();
-            ///insert b to canvas
-            ///insert d to canvas
-            UpdateMesh();
-        }
-
-        private void insertBusinesses()
-        {
-            var rand = new Random();
-            for (int i = 1; i <= numberOfA; i++)
-            {
-                bool freeSpace = false;
-                var randCol = 0;
-                var randRow = 0;
-                while (!freeSpace)
-                {
-                    randCol = rand.Next(1, numberOfColumns);
-                    randRow = rand.Next(1, numberOfRows);
-                    freeSpace = !agents.Any(x => x.DecalculateGlobalID(numberOfColumns, numberOfRows).Equals(new System.Drawing.Point(randCol, randRow)));
-                }
-
-
-
-                var business = new Business() { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow) };
-                ///agents.Add(agent);
-            }
-        }
-
-        private void insertAgents()
-        {
-            var rand = new Random();
-            for(int i = 1; i <= numberOfA; i++)
-            {
-                bool freeSpace = false;
-                var randCol = 0;
-                var randRow = 0;
-                while (!freeSpace)
-                {
-                    randCol = rand.Next(1, numberOfColumns);
-                    randRow = rand.Next(1, numberOfRows);
-                    freeSpace = !agents.Any(x => x.DecalculateGlobalID(numberOfColumns, numberOfRows).Equals(new System.Drawing.Point(randCol, randRow)));
-                }
-                
-                var agent = new Agent() { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow) };
-                agents.Add(agent);
-            }
-        }
-
-        public void numberDicDecRate_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            UpdateParameterDouble(sender, ref numberDecRate);
-        }
-
-        public void numberOfIterSuspB_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            UpdateParameterInt(sender, ref numberIterSuspB);
         }
     }
 }
