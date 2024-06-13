@@ -13,9 +13,9 @@ namespace ASIapp.Classes.Agent
 
         public enum HealthState
         {
-            Weak,
-            Standard,
-            Good
+            Weak = 1,
+            Standard = 2,
+            Good = 3
         }
 
         public enum IqState

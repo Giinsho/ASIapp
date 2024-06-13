@@ -29,7 +29,19 @@ namespace ASIapp
         private List<Agent> agents = new List<Agent>();
         private List<Business> businesses = new List<Business>();
         private List<Disease> diseases = new List<Disease>();
-   
+
+        private List<CellObject> CA_STATES = new List<CellObject>();
+        public int numberOfRows_caSate = 0;
+        public int numberOfColumns_caSate = 0;
+
+        public enum CAstate
+        {
+            Agent,
+            Disease,
+            Business1,
+            Business2,
+            Business3
+        }
 
 
         #endregion
@@ -296,8 +308,11 @@ namespace ASIapp
             return System.IO.Path.GetFileName(filePath);
         }
 
+
         public void Btn_readCaStates_Click(object sender, RoutedEventArgs e)
         {
+
+
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             openFileDialog.InitialDirectory = System.IO.Path.Combine(Environment.CurrentDirectory, "");
@@ -309,10 +324,20 @@ namespace ASIapp
                     string fileName = openFileDialog.FileName;
                     caStateFile = GetFileNameFromPath(fileName + "/CA_STATES");
                     string[] fileLines = File.ReadAllLines(fileName);
+
+                    numberOfColumns_caSate = fileLines.Length;
+                    numberOfRows_caSate = fileLines[0].Split(' ').Length;
+
+                    int ID = 0;
                     for (int i = 1; i < fileLines.Length; i++)
                     {
-                        Console.WriteLine(fileLines[i]);
+                        string[] values = fileLines[i].Split(' ');
+                        for (int j = 0; j < values.Length; j++)
+                        {
+                            CreateCaStatesFromFile((CAstate)Enum.Parse(typeof(CAstate), values[j]), numberOfColumns_caSate, j, i, ID++);
+                        }
 
+                        Console.WriteLine(fileLines[i]);
                     }
                 }
                 catch (Exception ex)
@@ -322,6 +347,44 @@ namespace ASIapp
             }
             UpdateRadioButtonStatus(rbtn_readCaStates, true);
         }
+
+        public void CreateCaStatesFromFile(CAstate CA, int n_of_col, int col, int row, int id)
+        {
+            CellObject cell = new CellObject(n_of_col, col, row);
+
+            switch (CA)
+            {
+                case CAstate.Agent:
+                    Agent agent = new Agent(cell);
+                    CA_STATES.Add(agent);
+                    agents.Add(agent);
+                    break;
+
+                case CAstate.Business1 or CAstate.Business2 or CAstate.Business3:
+                    var business = new Business((Business.B_TYPE)CA) { ID = id, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, col, row) };
+                    CA_STATES.Add(business);
+                    businesses.Add(business);
+                    break;
+                case CAstate.Disease:
+
+                    Disease disease = new Disease(cell);
+                    CA_STATES.Add(disease);
+                    diseases.Add(disease);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void UpdateAgentsWealth()
+        {
+            foreach (Agent agent in agents)
+            {
+                agent.WealthStateUpdate();
+            }
+        }
+
 
         public void Btn_readAProfile_Click(object sender, RoutedEventArgs e)
         {
@@ -334,11 +397,47 @@ namespace ASIapp
                 try
                 {
                     string fileName = openFileDialog.FileName;
-                    aProfileFile = GetFileNameFromPath(fileName + "/A_PROFILE");
                     string[] fileLines = File.ReadAllLines(fileName);
-                    for (int i = 1; i < fileLines.Length; i++)
+
+                    // Assuming the file format is fixed as described
+                    if (fileLines.Length >= 2)
                     {
-                        Console.WriteLine(fileLines[i]);
+                        // Split the header line
+                        string[] headers = fileLines[0].Split('\t');
+
+                        // Process data lines starting from the second line
+                        for (int i = 1; i < fileLines.Length; i++)
+                        {
+                            string[] data = fileLines[i].Split('\t');
+
+                            if (data.Length >= 8)
+                            {
+                                var a_id = int.Parse(data[0]);
+                                var a_glob_ID = int.Parse(data[1]);
+                                var IQ = int.Parse(data[2]);
+                                var hState = int.Parse(data[3]);
+                                var r_acc_B1 = double.Parse(data[4]);
+                                var r_acc_B2 = double.Parse(data[5]);
+                                var r_acc_B3 = double.Parse(data[6]);
+                                var mobility = double.Parse(data[7]);
+
+                                Agent agent = new Agent();
+                                agent.ID = a_id;
+                                agent.GLOBAL_ID = a_glob_ID;
+                                agent.IQ = IQ;
+                                agent.H_STATE = (AgentsLife.HealthState)hState;
+                                //agent.
+
+                                //                                agent.
+
+                                agent.MOBILITY = mobility;
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("File does not contain enough lines.");
                     }
                 }
                 catch (Exception ex)
@@ -872,9 +971,15 @@ namespace ASIapp
                                     double b_risk_acc = 0;
                                     switch (agent.IQ_STATE)
                                     {
-                                        case AgentsLife.IqState.Stupid: break;
-                                        case AgentsLife.IqState.Standard: break;
-                                        case AgentsLife.IqState.Clever: break;
+                                        case AgentsLife.IqState.Stupid:
+
+                                            break;
+                                        case AgentsLife.IqState.Standard:
+                                            
+                                            break;
+                                        case AgentsLife.IqState.Clever: 
+                                            
+                                            break;
                                     }
                                 }
                             }
