@@ -190,8 +190,6 @@ namespace ASIapp
 
                         };
                         rectList.Add(new RectangleModel(Width, Height, i, j, rect));
-                 
-                        
                     }
                     Canvas.SetLeft(rect, j * cellWidth);
                     Canvas.SetTop(rect, i * cellHeight);
@@ -207,15 +205,11 @@ namespace ASIapp
 
         public void ColorCellsAsAgents()
         {
-            var random = new Random();
-            var numberOfAgents = numberOfA;
-
-            rectList = rectList.OrderBy(x => random.Next()).ToList();
-
-            foreach (var rect in rectList.Take(numberOfAgents))
+            agents.ForEach(agent =>
             {
-                rect.Rectangle.Fill = Brushes.Orange;
-            }
+                var point = agent.DecalculateGlobalID(numberOfColumns, numberOfRows);
+
+            });
         }
 
         public void UpdateMesh()
@@ -746,7 +740,52 @@ namespace ASIapp
 
         public void Btn_run_Click(object sender, RoutedEventArgs e)
         {
-           UpdateMesh();
+            insertAgents();
+            ///insert b to canvas
+            ///insert d to canvas
+            UpdateMesh();
+        }
+
+        private void insertBusinesses()
+        {
+            var rand = new Random();
+            for (int i = 1; i <= numberOfA; i++)
+            {
+                bool freeSpace = false;
+                var randCol = 0;
+                var randRow = 0;
+                while (!freeSpace)
+                {
+                    randCol = rand.Next(1, numberOfColumns);
+                    randRow = rand.Next(1, numberOfRows);
+                    freeSpace = !agents.Any(x => x.DecalculateGlobalID(numberOfColumns, numberOfRows).Equals(new System.Drawing.Point(randCol, randRow)));
+                }
+
+
+
+                var business = new Business() { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow) };
+                ///agents.Add(agent);
+            }
+        }
+
+        private void insertAgents()
+        {
+            var rand = new Random();
+            for(int i = 1; i <= numberOfA; i++)
+            {
+                bool freeSpace = false;
+                var randCol = 0;
+                var randRow = 0;
+                while (!freeSpace)
+                {
+                    randCol = rand.Next(1, numberOfColumns);
+                    randRow = rand.Next(1, numberOfRows);
+                    freeSpace = !agents.Any(x => x.DecalculateGlobalID(numberOfColumns, numberOfRows).Equals(new System.Drawing.Point(randCol, randRow)));
+                }
+                
+                var agent = new Agent() { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow) };
+                agents.Add(agent);
+            }
         }
 
         public void numberDicDecRate_TextChanged(object sender, TextChangedEventArgs e)
