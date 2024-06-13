@@ -18,7 +18,7 @@ namespace ASIapp
         {
             this.Width = width;
             this.Height = height;
-            this.Row= row;
+            this.Row = row;
             this.Col = col;
             Rectangle = rectangle;
             CellObject = new List<CellObject>();

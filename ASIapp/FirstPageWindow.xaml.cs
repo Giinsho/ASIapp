@@ -937,9 +937,9 @@ namespace ASIapp
 
         private async void RunSimulation()
         {
-            ///for(int i = 1; i <= NumberOfIterations; i++)
-            ///{
-                await Task.Delay(20);
+            for(int i = 1; i <= NumberOfIterations; i++)
+            {
+                await Task.Delay(1000);
                 agents.ForEach(agent =>
                 {
                     if(agent.Counter > 0)
@@ -968,26 +968,136 @@ namespace ASIapp
                                 var b = isAnyBusiness.First().CellObject.FirstOrDefault(x => x is Business) as Business;
                                 if(agent.CAPITAL >= b.IC_THR)
                                 {
-                                    double b_risk_acc = 0;
-                                    switch (agent.IQ_STATE)
+                                    double b_risk_acc = b.BusinessAccept[b.Type][agent.IQ_STATE];
+                                    var rand = RandomGen.NextDouble();
+                                    if(rand > b_risk_acc)
                                     {
-                                        case AgentsLife.IqState.Stupid:
-
-                                            break;
-                                        case AgentsLife.IqState.Standard:
-                                            
-                                            break;
-                                        case AgentsLife.IqState.Clever: 
-                                            
-                                            break;
+                                        agent.CAPITAL += (agent.CAPITAL * b.CAP_INC) - (agent.CAPITAL * b.INV_A);
                                     }
+                                    else
+                                    {
+                                        agent.CAPITAL -= (agent.CAPITAL * b.INV_A);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                var rand = RandomGen.NextDouble();
+                                if(rand > agent.MOBILITY)
+                                {
+                                    var allFreeSpaces = RectList.Where(x => !x.CellObject.Any()).ToList();
+                                    var rand2 = RandomGen.Next(0, allFreeSpaces.Count - 1);
+                                    var selectedFreeSpace = allFreeSpaces.ElementAt(rand2);
+
+                                    if(agent.IQ > iqGtThan)
+                                    {
+                                        var foundNeighbors = GetNeighbors(selectedFreeSpace);
+                                        var isDisease = foundNeighbors.Any(c => c.CellObject.Any(co => co is Disease));
+                                        while (isDisease)
+                                        {
+                                            rand2 = RandomGen.Next(0, allFreeSpaces.Count - 1);
+                                            selectedFreeSpace = allFreeSpaces.ElementAt(rand2);
+                                            foundNeighbors = GetNeighbors(selectedFreeSpace);
+                                            isDisease = foundNeighbors.Any(c => c.CellObject.Any(co => co is Disease));
+                                        }
+                                    }
+
+                                    RectangleModel.CellObject.Remove(agent);
+                                    selectedFreeSpace.CellObject.Add(agent);
+                                    agent.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col, selectedFreeSpace.Row);
+
                                 }
                             }
                         }
                     }
-                    
+
                 });
-            ///}
+
+                businesses.ForEach(x =>
+                {
+                    var RectangleModel = rectList.ElementAt(x.GLOBAL_ID - 1);
+                    var n = GetNeighbors(RectangleModel).Skip(1);
+                    var freeSpace = n.Where(x => !x.CellObject.Any()).ToList();
+                    if(IsDebug && IsTest1Selected)
+                    {
+                        ///print
+                    }
+
+                    if (freeSpace.Any())
+                    {
+                        var rand = RandomGen.Next(0, freeSpace.Count - 1);
+                        var selectedFreeSpace = freeSpace.ElementAt(rand);
+
+                        RectangleModel.CellObject.Remove(x);
+                        selectedFreeSpace.CellObject.Add(x);
+                        x.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col, selectedFreeSpace.Row);
+
+                        if (IsDebug && IsTest1Selected)
+                        {
+                            ///print
+                        }
+                    }
+                    else
+                    {
+                        var allFreeSpaces = RectList.Where(x => !x.CellObject.Any()).ToList();
+                        var rand = RandomGen.Next(0, allFreeSpaces.Count - 1);
+                        var selectedFreeSpace = allFreeSpaces.ElementAt(rand);
+
+                        RectangleModel.CellObject.Remove(x);
+                        selectedFreeSpace.CellObject.Add(x);
+                        x.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col, selectedFreeSpace.Row);
+
+                        if (IsDebug && IsTest1Selected)
+                        {
+                            ///print
+                        }
+                    }
+                });
+
+                diseases.ForEach(x =>
+                {
+                    var RectangleModel = rectList.ElementAt(x.GLOBAL_ID - 1);
+                    var n = GetNeighbors(RectangleModel).Skip(1);
+                    var freeSpace = n.Where(x => !x.CellObject.Any()).ToList();
+                    if (IsDebug && IsTest1Selected)
+                    {
+                        ///print
+                    }
+
+                    if (freeSpace.Any())
+                    {
+                        var rand = RandomGen.Next(0, freeSpace.Count - 1);
+                        var selectedFreeSpace = freeSpace.ElementAt(rand);
+
+                        RectangleModel.CellObject.Remove(x);
+                        selectedFreeSpace.CellObject.Add(x);
+                        x.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col, selectedFreeSpace.Row);
+                        if (IsDebug && IsTest1Selected)
+                        {
+                            ///print
+                        }
+                    }
+                    else
+                    {
+                        var allFreeSpaces = RectList.Where(x => !x.CellObject.Any()).ToList();
+                        var rand = RandomGen.Next(0, allFreeSpaces.Count - 1);
+                        var selectedFreeSpace = allFreeSpaces.ElementAt(rand);
+
+                        RectangleModel.CellObject.Remove(x);
+                        selectedFreeSpace.CellObject.Add(x);
+                        x.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col, selectedFreeSpace.Row);
+
+                        if (IsDebug && IsTest1Selected)
+                        {
+                            ///print
+                        }
+                    }
+                });
+
+                UpdateMesh();
+                ///print
+                ///wykres (main4)
+            }
         }
     }
 }
