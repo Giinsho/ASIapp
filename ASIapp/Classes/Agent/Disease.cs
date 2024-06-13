@@ -7,7 +7,9 @@ using System.Windows.Media.Animation;
 
 namespace ASIapp.Classes
 {
-    public class Disease : CellObject
+
+    
+    public class Disease
     {
 
     }

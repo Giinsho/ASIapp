@@ -1,18 +1,109 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Transactions;
+using ASIapp.Classes.Businesses;
 
 namespace ASIapp.Classes.Agent
 {
-    public class Agent : CellObject
+    using static Util;
+
+    public class Agent : AgentsLife
     {
+    
         public int IQ { get; set; }
-        public int H_STATE { get; set; }
-        public double R_ACC_B1 { get; set; }
-        public double R_ACC_B2 { get; set; }
-        public double R_ACC_B3 { get; set; }
+
+        public IqState IQ_STATE { get; set; }
+        public HealthState H_STATE { get; set; }
+        public double DISEASE { get; set; }
         public double MOBILITY { get; set; }
+        public double CAPITAL { get; set; }
+
+        public static double INIT_CAPITAL;
+
+        public WealthState WealthState = WealthState.Poor;
+
+
+        public Agent()
+        {
+            IQ = (int)Random.Gauss(IqMean, IqRangeMin, IqRangeMax);
+            dynamic rand = Random.Next();
+
+            if (rand <= IqStateThresholds[IqState.Stupid])
+            {
+                IQ_STATE = IqState.Stupid;
+            }
+            else if (rand <= IqStateThresholds[IqState.Standard])
+            {
+                IQ_STATE = IqState.Standard;
+            }
+            else
+            {
+                IQ_STATE = IqState.Clever;
+            }
+
+
+            rand = Random.NextDouble();
+
+            if (rand <= HealthStateThresholds[HealthState.Weak])
+            {
+                H_STATE = HealthState.Weak;
+            }
+            else if (rand <= HealthStateThresholds[HealthState.Standard])
+            {
+                H_STATE = HealthState.Standard;
+            }
+            else
+            {
+                H_STATE = HealthState.Good;
+            }
+
+
+            MOBILITY = MobilityThresholds[IQ_STATE];
+
+            CAPITAL = INIT_CAPITAL;
+
+        }
+
+        public Agent(CellObject cell) : this()
+        {
+            ID = cell.ID;
+            GLOBAL_ID = cell.GLOBAL_ID;
+        }
+
+        public void WealthStateUpdate()
+        {
+            double thresholdPoor = WealthThresholds[WealthState.Poor] * INIT_CAPITAL;
+            double thresholdFair = WealthThresholds[WealthState.Fair] * INIT_CAPITAL;
+
+            if (CAPITAL <= thresholdPoor)
+            {
+                WealthState = WealthState.Poor;
+            }
+            else if (CAPITAL > thresholdPoor && CAPITAL <= thresholdFair)
+            {
+                WealthState = WealthState.Fair;
+            }
+            else
+            {
+                WealthState = WealthState.Rich;
+            }
+        }
+
+        public bool IsAgentFair()
+        {
+            double thresholdPoor = WealthThresholds[WealthState.Poor] * INIT_CAPITAL;
+            double thresholdFair = WealthThresholds[WealthState.Fair] * INIT_CAPITAL;
+            return CAPITAL > thresholdPoor && CAPITAL <= thresholdFair;
+        }
+
+        public bool IsAgentPoor()
+        {
+            double threshold = WealthThresholds[WealthState.Poor] * INIT_CAPITAL;
+            return CAPITAL <= threshold;
+        }
+
+        public bool IsAgentRich()
+        {
+            double threshold = WealthThresholds[WealthState.Fair] * INIT_CAPITAL;
+            return CAPITAL > threshold;
+        }
     }
 }

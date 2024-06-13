@@ -16,6 +16,20 @@ namespace ASIapp
             _firstPageWindow = firstPageWindow;
         }
 
+        public static double Gauss(this Random random, double mean, double min, double max)
+        {
+            double u1 = 1.0 - random.NextDouble(); 
+            double u2 = 1.0 - random.NextDouble();
+            double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
+                                   Math.Sin(2.0 * Math.PI * u2);
+            double randNormal =
+                mean + 14 * randStdNormal;
+            double std = (randNormal - min) / (max - min);
+            return std * (max - min) + min;
+        }
+
+
+        public static Random Random;
         public static int NumberOfRows { get => _firstPageWindow.numberOfRows; set => _firstPageWindow.numberOfRows = value; }
         public static int NumberOfColumns { get => _firstPageWindow.numberOfColumns; set => _firstPageWindow.numberOfColumns = value; }
         public static int NumberOfA { get => _firstPageWindow.numberOfA; set => _firstPageWindow.numberOfA = value; }

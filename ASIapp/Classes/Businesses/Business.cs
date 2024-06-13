@@ -15,7 +15,6 @@ namespace ASIapp.Classes.Businesses
             Business1,
             Business2,
             Business3
-
         }
 
         public double IC_THR { get; set; }
