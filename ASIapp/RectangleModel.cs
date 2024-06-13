@@ -10,11 +10,11 @@ namespace ASIapp
     {
         public double Width { get; set; }
         public double Height { get; set; }
-        public double Row { get; set; }
-        public double Col { get; set; }
+        public int Row { get; set; }
+        public int Col { get; set; }
         public Rectangle Rectangle { get; set; }
         public List<CellObject> CellObject { get; set; }
-        public RectangleModel(double width, double height, double row, double col, Rectangle rectangle)
+        public RectangleModel(double width, double height, int row, int col, Rectangle rectangle)
         {
             this.Width = width;
             this.Height = height;

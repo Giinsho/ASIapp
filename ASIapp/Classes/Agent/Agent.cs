@@ -16,6 +16,8 @@ namespace ASIapp.Classes.Agent
         public double MOBILITY { get; set; }
         public double CAPITAL { get; set; }
 
+        public int Counter { get; set; } = 0;
+
         public double INIT_CAPITAL;
 
         public WealthState WealthState = WealthState.Poor;
