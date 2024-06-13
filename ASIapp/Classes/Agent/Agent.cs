@@ -23,8 +23,8 @@ namespace ASIapp.Classes.Agent
 
         public Agent()
         {
-            IQ = (int)Random.Gauss(IqMean, IqRangeMin, IqRangeMax);
-            dynamic rand = Random.Next();
+            IQ = (int)RandomGen.Gauss(IqMean, IqRangeMin, IqRangeMax);
+            dynamic rand = RandomGen.Next();
 
             if (rand <= IqStateThresholds[IqState.Stupid])
             {
@@ -40,7 +40,7 @@ namespace ASIapp.Classes.Agent
             }
 
 
-            rand = Random.NextDouble();
+            rand = RandomGen.NextDouble();
 
             if (rand <= HealthStateThresholds[HealthState.Weak])
             {

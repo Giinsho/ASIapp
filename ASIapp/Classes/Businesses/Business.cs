@@ -15,6 +15,8 @@ namespace ASIapp.Classes.Businesses
         public int CAP_INC { get; set; }
         public double P_RISE { get; set; }
         public double AVAIL { get; set;  }
+        public B_TYPE Type { get; set; }
+
         public enum B_TYPE
         {
             Business1,
@@ -24,6 +26,7 @@ namespace ASIapp.Classes.Businesses
         
         public Business(B_TYPE bType)
         {
+            this.Type = bType;
             if (bType == B_TYPE.Business1)
             {
                 IC_THR =  (double)ThrB1Val;

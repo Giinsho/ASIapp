@@ -167,9 +167,9 @@ namespace ASIapp
             double cellWidth = myCanvas.ActualWidth / cols;
             double cellHeight = myCanvas.ActualHeight / rows;
 
-            for (int i = 0; i <= rows; i++)
+            for (int i = 0; i < rows; i++)
             {
-                for (int j = 0; j <= cols; j++)
+                for (int j = 0; j < cols; j++)
                 {
                     Rectangle rect;
                     if (i == 0 || j == 0 || j==cols-1 || i==rows-1 )
@@ -203,16 +203,58 @@ namespace ASIapp
                 }
             }
 
+            ColorCellsAsDiseases();
+            ColorCellsAsBusinesses();
             ColorCellsAsAgents();
+        }
 
+        private void ColorCellsAsDiseases()
+        {
+            diseases.ForEach(x =>
+            {
+                var a = rectList.ElementAt(x.GLOBAL_ID - 1);
+                a.CellObject.Add(x);
+                a.Rectangle.Fill = Brushes.Violet;
+            });
+        }
+
+        private void ColorCellsAsBusinesses()
+        {
+            businesses.ForEach(x =>
+            {
+                var a = rectList.ElementAt(x.GLOBAL_ID - 1);
+                a.CellObject.Add(x);
+                Brush brush = null;
+                switch (x.Type)
+                {
+                    case Business.B_TYPE.Business1: brush = Brushes.LightBlue; break;
+                    case Business.B_TYPE.Business2: brush = Brushes.Blue; break;
+                    case Business.B_TYPE.Business3: brush = Brushes.DarkBlue; break;
+                }
+                a.Rectangle.Fill = brush;
+            });
         }
 
         public void ColorCellsAsAgents()
         {
-            agents.ForEach(agent =>
+            agents.ForEach(x =>
             {
-                var point = agent.DecalculateGlobalID(numberOfColumns, numberOfRows);
-
+                var a = rectList.ElementAt(x.GLOBAL_ID - 1);
+                a.CellObject.Add(x);
+                Brush brush = null;
+                if (x.IsAgentPoor())
+                {
+                    brush = Brushes.Yellow;
+                }
+                else if (x.IsAgentFair())
+                {
+                    brush = Brushes.Orange;
+                }
+                else if (x.IsAgentRich())
+                {
+                    brush = Brushes.Red;
+                }
+                a.Rectangle.Fill = brush;
             });
         }
 
@@ -234,72 +276,74 @@ namespace ASIapp
             }
         }
 
-      
-
-      
-
         public void Btn_run_Click(object sender, RoutedEventArgs e)
         {
-
-
-            Random = isCustomSeedSelected == true ? new Random(seed) : new Random();
+            RandomGen = isCustomSeedSelected == true ? new Random(seed) : new Random();
        
-     
             insertAgents();
             insertBusinesses();
-            ///insert d to canvas
+            insertDiseases();
             UpdateMesh();
+        }
+
+        private void insertObject<T>(List<T> cells, int numberOf, Func<int, int, bool> freeFunc, Func<int, int, int, T> addFunc) where T : CellObject
+        {
+            cells.Clear();
+            for (int i = 1; i <= numberOf; i++)
+            {
+                bool freeSpace = false;
+                var randCol = 0;
+                var randRow = 0;
+                while (!freeSpace)
+                {
+                    randCol = RandomGen.Next(1, numberOfColumns);
+                    randRow = RandomGen.Next(1, numberOfRows);
+                    freeSpace = freeFunc(randCol, randRow);
+                }
+                var x = addFunc(i, randCol, randRow);
+                cells.Add(x);
+            }
+        }
+
+        private void insertDiseases()
+        {
+            insertObject(diseases, numberOfD, (randCol, randRow) =>
+            {
+                var anyAgent = !agents.Any(x => x.DecalculateGlobalID(numberOfColumns, numberOfRows).Equals(new System.Drawing.Point(randCol, randRow)));
+                var anyBusiness = !businesses.Any(x => x.DecalculateGlobalID(numberOfColumns, numberOfRows).Equals(new System.Drawing.Point(randCol, randRow)));
+                return anyAgent && anyBusiness;
+            }, (i, randCol, randRow) =>
+            {
+                return new Disease() { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow) };
+            });
         }
 
         private void insertBusinesses()
         {
-            var rand = new Random();
-            for (int i = 1; i <= numberOfB; i++)
+            insertObject(businesses, numberOfB, (randCol, randRow) =>
             {
-                bool freeSpace = false;
-                var randCol = 0;
-                var randRow = 0;
-                while (!freeSpace)
-                {
-                    randCol = rand.Next(1, numberOfColumns);
-                    randRow = rand.Next(1, numberOfRows);
-                    freeSpace = !agents.Any(x => x.DecalculateGlobalID(numberOfColumns, numberOfRows).Equals(new System.Drawing.Point(randCol, randRow)));
-                }
-
-
-                var randomType = (Business.B_TYPE)Random.Next(0, Enum.GetNames(typeof(Business.B_TYPE)).Length);
+                return !agents.Any(x => x.DecalculateGlobalID(numberOfColumns, numberOfRows).Equals(new System.Drawing.Point(randCol, randRow)));
+            }, (i, randCol, randRow) =>
+            {
+                var randomType = (Business.B_TYPE)RandomGen.Next(0, Enum.GetNames(typeof(Business.B_TYPE)).Length);
                 var business = new Business(randomType) { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow) };
-                businesses.Add(business);
-
-
-            }
+                return business;
+            });
         }
 
         private void insertAgents()
         {
-            var rand = new Random();
-            for(int i = 1; i <= numberOfA; i++)
+            insertObject(agents, numberOfA, (randCol, randRow) =>
             {
-                bool freeSpace = false;
-                var randCol = 0;
-                var randRow = 0;
-                while (!freeSpace)
-                {
-                    randCol = rand.Next(1, numberOfColumns);
-                    randRow = rand.Next(1, numberOfRows);
-                    freeSpace = !agents.Any(x => x.DecalculateGlobalID(numberOfColumns, numberOfRows).Equals(new System.Drawing.Point(randCol, randRow)));
-                }
-                
-                var agent = new Agent() { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow),  };
+                return !agents.Any(x => x.DecalculateGlobalID(numberOfColumns, numberOfRows).Equals(new System.Drawing.Point(randCol, randRow)));
+            }, (i, randCol, randRow) =>
+            {
+                var agent = new Agent() { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow), };
                 agent.CAPITAL = initCapitIc;
                 agent.INIT_CAPITAL = initCapitIc;
-                agents.Add(agent);
-            }
+                return agent;
+            });
         }
-
-
-
-
 
         static string GetFileNameFromPath(string filePath)
         {

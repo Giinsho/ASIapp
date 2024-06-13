@@ -9,7 +9,7 @@ namespace ASIapp.Classes
 {
 
     
-    public class Disease
+    public class Disease : CellObject
     {
 
     }
