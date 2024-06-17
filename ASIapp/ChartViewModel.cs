@@ -1,111 +1,109 @@
-﻿using ASIapp.Classes.Agent;
-using LiveChartsCore;
-using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting;
-using LiveChartsCore.SkiaSharpView.VisualElements;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.SkiaSharpView.WPF;
-using SkiaSharp;
-using System.Collections.Generic;
-using System.Linq;
-using System.Collections.ObjectModel;
+﻿using LiveCharts;
+using LiveCharts.Wpf;
+using System.ComponentModel;
+using System.Windows;
+
 namespace ASIapp
 {
     using static Util;
-    public class ChartViewModel
+    public class ChartViewModel : INotifyPropertyChanged
     {
+        private SeriesCollection? _series;
 
-        public ISeries[] Series { get; set; }
-        public LabelVisual Title { get; set; }
-        public Axis[] XAxes { get; set; }
-        public Axis[] YAxes { get; set; }
+        public SeriesCollection? Series
+        {
+            get { return _series; }
+            set
+            {
+                _series = value;
+                OnPropertyChanged(nameof(Series));
+            }
+        }
+
+        private Func<double, string>? _yAxes;
+
+        public Func<double, string>? YAxes
+        {
+            get { return _yAxes; }
+            set
+            {
+                _yAxes = value;
+                OnPropertyChanged(nameof(YAxes));
+            }
+        }
+
+        private List<string>? _xAxes;
+
+        public List<string>? XAxes
+        {
+            get { return _xAxes; }
+            set
+            {
+                _xAxes = value;
+                OnPropertyChanged(nameof(XAxes));
+            }
+        }
 
         public ChartViewModel()
         {
             InitializeChart();
-           
+
         }
 
-        public void InitializeChart()
+        private void InitializeChart()
         {
-            // Define chart series
-            List<string> titles = new List<string> { "Poor", "Fair", "Rich", "Init Capital" };
-            List<SKColor> colors = new List<SKColor>
-            {
-                SKColors.Blue,
-                SKColors.Green,
-                SKColors.Red,
-                SKColors.Black
-            };
+            Series = new SeriesCollection();
 
-            // Initialize chart series
-            List<ISeries> chartSeries = new List<ISeries>();
+            // Example data setup (replace with actual logic)
+            var richValues = new ChartValues<double> {10};
+            var fairValues = new ChartValues<double> {10};
+            var poorValues = new ChartValues<double> {10};
 
-            for (int i = 0; i < titles.Count; i++)
-            {
-                chartSeries.Add(new LineSeries<double>
-                {
-                    Name = titles[i], // Updated to match the current LiveChartsCore property
-                    Values = new double[] { InitCapitIc }, // Example data
-                    Stroke = new SolidColorPaint(colors[i]),
-                    Fill = null
-                });
-            }
+            Series.Add(new LineSeries { Title = "Poor", Values = richValues });
+            Series.Add(new LineSeries { Title = "Fair", Values = fairValues });
+            Series.Add(new LineSeries { Title = "Rich", Values = poorValues });
+            Series.Add(new LineSeries { Title = "InitCapital", Values = new ChartValues<double> { 10 } });
 
-            Series = chartSeries.ToArray();
 
-            Title = new LabelVisual
-            {
-                Text = "Agents",
-                TextSize = 25,
-                Padding = new LiveChartsCore.Drawing.Padding(15),
-                Paint = new SolidColorPaint(SKColors.DarkSlateGray)
-            };
-
-            XAxes = new Axis[]
-            {
-                new Axis
-                {
-                    Name = "Iteration",
-                    LabelsRotation = 15,
-                    SeparatorsPaint = new SolidColorPaint(SKColors.LightGray),
-                    TextSize = 20
-                }
-            };
-
-            YAxes = new Axis[]
-            {
-                new Axis
-                {
-                    Name = "Wealth",
-                    LabelsRotation = 0,
-                    SeparatorsPaint = new SolidColorPaint(SKColors.LightGray),
-                    TextSize = 20
-                }
-            };
+            YAxes = value => value.ToString();
+        
+            
         }
 
-        public void UpdateSeriesValues(IEnumerable<double> richValues, IEnumerable<double> fairValues, IEnumerable<double> poorValues)
+        public void ResetChart()
         {
-            if (Series.Length >= 3)
-            {
-                var poorSeries = Series[0] as LineSeries<double>;
-                var fairSeries = Series[1] as LineSeries<double>;
-                var richSeries = Series[2] as LineSeries<double>;
+            for (int i = 0; i < 4; i++)
+                Series[i].Values.Clear();
+        }
 
-                if (poorSeries != null)
+        public void UpdateSeriesValues(ChartValues<double> richValues, ChartValues<double> fairValues, ChartValues<double> poorValues)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                if (Series.Count >= 4)
                 {
-                    poorSeries.Values = poorValues.ToArray();
+                    // Find the maximum value in each collection
+                    double maxPoorValue = poorValues.Any() ? poorValues.Max() : 0;
+                    double maxFairValue = fairValues.Any() ? fairValues.Max() : 0;
+                    double maxRichValue = richValues.Any() ? richValues.Max() : 0;
+
+                    // Add the maximum values to the corresponding series
+                    Series[0].Values.Add((double)maxPoorValue);
+                    Series[1].Values.Add((double)maxFairValue );
+                    Series[2].Values.Add((double)maxRichValue );
+
+                    // Add InitCapitIc to the Init Capital series
+                    Series[3].Values.Add((double)InitCapitIc);
                 }
-                if (fairSeries != null)
-                {
-                    fairSeries.Values = fairValues.ToArray();
-                }
-                if (richSeries != null)
-                {
-                    richSeries.Values = richValues.ToArray();
-                }
-            }
+            });
+        }
+
+        // INotifyPropertyChanged implementation
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

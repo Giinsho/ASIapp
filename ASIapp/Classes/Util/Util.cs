@@ -14,6 +14,8 @@ namespace ASIapp
         public static void Initialize(FirstPageWindow firstPageWindow)
         {
             _firstPageWindow = firstPageWindow;
+
+        
         }
 
         public static double Gauss(this Random random, double mean, double min, double max)
@@ -95,5 +97,8 @@ namespace ASIapp
         public static int WealthFeasible { get => _firstPageWindow.wealth_feasible; set => _firstPageWindow.wealth_feasible = value; }
         public static int WealthRich { get => _firstPageWindow.wealth_rich; set => _firstPageWindow.wealth_rich = value; }
         public static List<RectangleModel> RectList => _firstPageWindow.rectList;
+
+
+        
     }
 }

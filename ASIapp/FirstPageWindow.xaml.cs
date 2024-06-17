@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -8,12 +9,18 @@ using Microsoft.Win32;
 using ASIapp.Classes;
 using ASIapp.Classes.Agent;
 using ASIapp.Classes.Businesses;
-using System;
+
+
+using SkiaSharp;
+using LiveCharts;
+using LiveCharts.Wpf;
+
 
 namespace ASIapp
 {
 
     using static Util;
+
     /// <summary>
     /// Interaction logic for FirstPageWindow.xaml
     /// </summary>
@@ -34,8 +41,11 @@ namespace ASIapp
         public int numberOfRows_caSate = 0;
         public int numberOfColumns_caSate = 0;
 
+        private ChartViewModel chartViewModel = new ChartViewModel();
 
-        private ChartViewModel ChartViewModel { get; set; }
+
+
+
 
 
         public enum CAstate
@@ -100,7 +110,7 @@ namespace ASIapp
         public double pIll3;
 
         public int numberIterSuspB;
-        public double numberDecRate; 
+        public double numberDecRate;
 
         #endregion
 
@@ -160,19 +170,30 @@ namespace ASIapp
         #endregion
 
         #region Rectangle and mesh
+
         public List<RectangleModel> rectList;
+
         #endregion
+
+
+
 
         public FirstPageWindow(MainWindow window)
         {
             InitializeComponent();
-          
+
             _mainWindow = window;
+            _mainWindow.DataContext = chartViewModel;
             rectList = new List<RectangleModel>();
+
             Initialize(this);
-            ChartViewModel = new ChartViewModel();
-        
-            this.DataContext = ChartViewModel;
+
+
+
+        }
+
+        public FirstPageWindow()
+        {
 
         }
 
@@ -182,9 +203,9 @@ namespace ASIapp
         {
             rectList.Clear();
             myCanvas.Children.Clear();
-            var cols = numberOfColumns+2;
-            var rows = numberOfRows+2;
-            
+            var cols = numberOfColumns + 2;
+            var rows = numberOfRows + 2;
+
             double cellWidth = myCanvas.ActualWidth / cols;
             double cellHeight = myCanvas.ActualHeight / rows;
 
@@ -193,7 +214,7 @@ namespace ASIapp
                 for (int j = 0; j < cols; j++)
                 {
                     Rectangle rect;
-                    if (i == 0 || j == 0 || j==cols-1 || i==rows-1 )
+                    if (i == 0 || j == 0 || j == cols - 1 || i == rows - 1)
                     {
                         rect = new Rectangle
                         {
@@ -204,8 +225,10 @@ namespace ASIapp
                             Fill = Brushes.Gray
 
                         };
-                
-                    } else {
+
+                    }
+                    else
+                    {
                         rect = new Rectangle
                         {
                             Width = cellWidth,
@@ -216,6 +239,7 @@ namespace ASIapp
                         };
                         rectList.Add(new RectangleModel(Width, Height, i, j, rect));
                     }
+
                     Canvas.SetLeft(rect, j * cellWidth);
                     Canvas.SetTop(rect, i * cellHeight);
                     myCanvas.Children.Add(rect);
@@ -248,10 +272,17 @@ namespace ASIapp
                 Brush brush = null;
                 switch (x.Type)
                 {
-                    case Business.B_TYPE.Business1: brush = Brushes.LightBlue; break;
-                    case Business.B_TYPE.Business2: brush = Brushes.Blue; break;
-                    case Business.B_TYPE.Business3: brush = Brushes.DarkBlue; break;
+                    case Business.B_TYPE.Business1:
+                        brush = Brushes.LightBlue;
+                        break;
+                    case Business.B_TYPE.Business2:
+                        brush = Brushes.Blue;
+                        break;
+                    case Business.B_TYPE.Business3:
+                        brush = Brushes.DarkBlue;
+                        break;
                 }
+
                 a.Rectangle.Fill = brush;
             });
         }
@@ -275,13 +306,14 @@ namespace ASIapp
                 {
                     brush = Brushes.Red;
                 }
+
                 a.Rectangle.Fill = brush;
             });
         }
 
         public void UpdateMesh()
         {
-            
+
             DrawMesh();
         }
 
@@ -341,7 +373,8 @@ namespace ASIapp
                         string[] values = fileLines[i].Split(' ');
                         for (int j = 0; j < values.Length; j++)
                         {
-                            CreateCaStatesFromFile((CAstate)Enum.Parse(typeof(CAstate), values[j]), numberOfColumns_caSate, j, i, ID++);
+                            CreateCaStatesFromFile((CAstate)Enum.Parse(typeof(CAstate), values[j]),
+                                numberOfColumns_caSate, j, i, ID++);
                         }
 
                         Console.WriteLine(fileLines[i]);
@@ -352,6 +385,7 @@ namespace ASIapp
                     MessageBox.Show($"Error reading file: {ex.Message}");
                 }
             }
+
             UpdateRadioButtonStatus(rbtn_readCaStates, true);
         }
 
@@ -368,7 +402,8 @@ namespace ASIapp
                     break;
 
                 case CAstate.Business1 or CAstate.Business2 or CAstate.Business3:
-                    var business = new Business((Business.B_TYPE)CA) { ID = id, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, col, row) };
+                    var business = new Business((Business.B_TYPE)CA)
+                        { ID = id, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, col, row) };
                     CA_STATES.Add(business);
                     businesses.Add(business);
                     break;
@@ -452,6 +487,7 @@ namespace ASIapp
                     MessageBox.Show($"Error reading file: {ex.Message}");
                 }
             }
+
             UpdateRadioButtonStatus(rbtn_readAprofile, true);
 
         }
@@ -881,7 +917,8 @@ namespace ASIapp
             return result;
         }
 
-        private void insertObject<T>(List<T> cells, int numberOf, Func<int, int, bool> freeFunc, Func<int, int, int, T> addFunc) where T : CellObject
+        private void insertObject<T>(List<T> cells, int numberOf, Func<int, int, bool> freeFunc,
+            Func<int, int, int, T> addFunc) where T : CellObject
         {
             cells.Clear();
             for (int i = 1; i <= numberOf; i++)
@@ -895,6 +932,7 @@ namespace ASIapp
                     randRow = RandomGen.Next(1, numberOfRows);
                     freeSpace = freeFunc(randCol, randRow);
                 }
+
                 var x = addFunc(i, randCol, randRow);
                 cells.Add(x);
             }
@@ -903,26 +941,32 @@ namespace ASIapp
         private void insertDiseases()
         {
             insertObject(diseases, numberOfD, (randCol, randRow) =>
-            {
-                var anyAgent = !agents.Any(x => x.GLOBAL_ID == Agent.CalculateGlobalID(numberOfColumns, randCol, randRow));
-                var anyBusiness = !businesses.Any(x => x.GLOBAL_ID == Agent.CalculateGlobalID(numberOfColumns, randCol, randRow));
-                return anyAgent && anyBusiness;
-            }, (i, randCol, randRow) =>
-            {
-                return new Disease() { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow) };
-            });
+                {
+                    var anyAgent = !agents.Any(x =>
+                        x.GLOBAL_ID == Agent.CalculateGlobalID(numberOfColumns, randCol, randRow));
+                    var anyBusiness = !businesses.Any(x =>
+                        x.GLOBAL_ID == Agent.CalculateGlobalID(numberOfColumns, randCol, randRow));
+                    return anyAgent && anyBusiness;
+                },
+                (i, randCol, randRow) =>
+                {
+                    return new Disease()
+                        { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow) };
+                });
         }
 
         private void insertBusinesses()
         {
             insertObject(businesses, numberOfB, (randCol, randRow) =>
             {
-                var anyBusiness = !businesses.Any(x => x.GLOBAL_ID == Agent.CalculateGlobalID(numberOfColumns, randCol, randRow));
+                var anyBusiness = !businesses.Any(x =>
+                    x.GLOBAL_ID == Agent.CalculateGlobalID(numberOfColumns, randCol, randRow));
                 return anyBusiness;
             }, (i, randCol, randRow) =>
             {
                 var randomType = (Business.B_TYPE)RandomGen.Next(0, Enum.GetNames(typeof(Business.B_TYPE)).Length);
-                var business = new Business(randomType) { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow) };
+                var business = new Business(randomType)
+                    { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow) };
                 return business;
             });
         }
@@ -931,11 +975,13 @@ namespace ASIapp
         {
             insertObject(agents, numberOfA, (randCol, randRow) =>
             {
-                var anyAgents = !agents.Any(x => x.GLOBAL_ID == Agent.CalculateGlobalID(numberOfColumns, randCol, randRow));
+                var anyAgents = !agents.Any(x =>
+                    x.GLOBAL_ID == Agent.CalculateGlobalID(numberOfColumns, randCol, randRow));
                 return anyAgents;
             }, (i, randCol, randRow) =>
             {
-                var agent = new Agent() { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow), };
+                var agent = new Agent()
+                    { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow), };
                 agent.CAPITAL = initCapitIc;
                 agent.INIT_CAPITAL = initCapitIc;
                 return agent;
@@ -944,6 +990,7 @@ namespace ASIapp
 
         private async void RunSimulation()
         {
+            chartViewModel.ResetChart();
             for (int i = 1; i <= NumberOfIterations; i++)
             {
                 await Task.Delay(1000);
@@ -980,6 +1027,8 @@ namespace ASIapp
                                     if (rand > b_risk_acc)
                                     {
                                         agent.CAPITAL += (agent.CAPITAL * b.CAP_INC) - (agent.CAPITAL * b.INV_A);
+                                        // ELO TUTAJ
+                                        //  agent.CAPITAL = (agent.CAPITAL * b.CAP_INC) - (agent.CAPITAL * b.INV_A);
                                     }
                                     else
                                     {
@@ -1011,7 +1060,8 @@ namespace ASIapp
 
                                     RectangleModel.CellObject.Remove(agent);
                                     selectedFreeSpace.CellObject.Add(agent);
-                                    agent.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col, selectedFreeSpace.Row);
+                                    agent.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col,
+                                        selectedFreeSpace.Row);
 
                                 }
                             }
@@ -1037,7 +1087,8 @@ namespace ASIapp
 
                         RectangleModel.CellObject.Remove(x);
                         selectedFreeSpace.CellObject.Add(x);
-                        x.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col, selectedFreeSpace.Row);
+                        x.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col,
+                            selectedFreeSpace.Row);
 
                         if (IsDebug && IsTest1Selected)
                         {
@@ -1052,7 +1103,8 @@ namespace ASIapp
 
                         RectangleModel.CellObject.Remove(x);
                         selectedFreeSpace.CellObject.Add(x);
-                        x.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col, selectedFreeSpace.Row);
+                        x.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col,
+                            selectedFreeSpace.Row);
 
                         if (IsDebug && IsTest1Selected)
                         {
@@ -1078,7 +1130,8 @@ namespace ASIapp
 
                         RectangleModel.CellObject.Remove(x);
                         selectedFreeSpace.CellObject.Add(x);
-                        x.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col, selectedFreeSpace.Row);
+                        x.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col,
+                            selectedFreeSpace.Row);
                         if (IsDebug && IsTest1Selected)
                         {
                             ///print
@@ -1092,7 +1145,8 @@ namespace ASIapp
 
                         RectangleModel.CellObject.Remove(x);
                         selectedFreeSpace.CellObject.Add(x);
-                        x.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col, selectedFreeSpace.Row);
+                        x.GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, selectedFreeSpace.Col,
+                            selectedFreeSpace.Row);
 
                         if (IsDebug && IsTest1Selected)
                         {
@@ -1100,6 +1154,11 @@ namespace ASIapp
                         }
                     }
                 });
+
+                foreach (var a in agents)
+                {
+                    a.WealthStateUpdate();
+                }
 
                 UpdateChart();
 
@@ -1121,16 +1180,34 @@ namespace ASIapp
 
         private void UpdateChart()
         {
-         
+            var richValues = new ChartValues<double>(FindAgentsByWealth(AgentsLife.WealthState.Rich));
+            var fairValues = new ChartValues<double>(FindAgentsByWealth(AgentsLife.WealthState.Fair));
+            var poorValues = new ChartValues<double>(FindAgentsByWealth(AgentsLife.WealthState.Poor));
 
-            var richValues = new List<double> { agents.Count(a => a.WealthState == AgentsLife.WealthState.Rich) };
-            var fairValues = new List<double> { agents.Count(a => a.WealthState == AgentsLife.WealthState.Fair) };
-            var poorValues = new List<double> { agents.Count(a => a.WealthState == AgentsLife.WealthState.Poor) };
-
-            ChartViewModel.UpdateSeriesValues(richValues, fairValues, poorValues);
+            chartViewModel.UpdateSeriesValues(richValues, fairValues, poorValues);
         }
 
-  
+
+
+        private ChartValues<double> FindAgentsByWealth(AgentsLife.WealthState state)
+        {
+            List<Agent> filteredAgents = agents.FindAll(a =>
+                state switch
+                {
+                    AgentsLife.WealthState.Poor => a.IsAgentPoor(),
+                    AgentsLife.WealthState.Fair => a.IsAgentFair(),
+                    _ => a.IsAgentRich()
+                });
+
+            if (filteredAgents.Count > 0)
+            {
+                return new ChartValues<double>(filteredAgents.Select(a => a.CAPITAL));
+            }
+            else
+            {
+                return new ChartValues<double> { initCapitIc }; 
+            }
+        }
 
     }
 }
