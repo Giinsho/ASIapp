@@ -34,6 +34,10 @@ namespace ASIapp
         public int numberOfRows_caSate = 0;
         public int numberOfColumns_caSate = 0;
 
+
+        private ChartViewModel ChartViewModel { get; set; }
+
+
         public enum CAstate
         {
             Agent,
@@ -166,6 +170,9 @@ namespace ASIapp
             _mainWindow = window;
             rectList = new List<RectangleModel>();
             Initialize(this);
+            ChartViewModel = new ChartViewModel();
+        
+            this.DataContext = ChartViewModel;
 
         }
 
@@ -937,12 +944,12 @@ namespace ASIapp
 
         private async void RunSimulation()
         {
-            for(int i = 1; i <= NumberOfIterations; i++)
+            for (int i = 1; i <= NumberOfIterations; i++)
             {
                 await Task.Delay(1000);
                 agents.ForEach(agent =>
                 {
-                    if(agent.Counter > 0)
+                    if (agent.Counter > 0)
                     {
                         agent.Counter--;
                     }
@@ -954,7 +961,7 @@ namespace ASIapp
                         if (isAnyDisease)
                         {
                             var rand = RandomGen.NextDouble();
-                            if(rand <= agent.DISEASE)
+                            if (rand <= agent.DISEASE)
                             {
                                 agent.Counter += numberIterSuspB;
                                 agent.CAPITAL -= (agent.CAPITAL * numberDecRate);
@@ -966,11 +973,11 @@ namespace ASIapp
                             if (isAnyBusiness.Any())
                             {
                                 var b = isAnyBusiness.First().CellObject.FirstOrDefault(x => x is Business) as Business;
-                                if(agent.CAPITAL >= b.IC_THR)
+                                if (agent.CAPITAL >= b.IC_THR)
                                 {
                                     double b_risk_acc = b.BusinessAccept[b.Type][agent.IQ_STATE];
                                     var rand = RandomGen.NextDouble();
-                                    if(rand > b_risk_acc)
+                                    if (rand > b_risk_acc)
                                     {
                                         agent.CAPITAL += (agent.CAPITAL * b.CAP_INC) - (agent.CAPITAL * b.INV_A);
                                     }
@@ -983,13 +990,13 @@ namespace ASIapp
                             else
                             {
                                 var rand = RandomGen.NextDouble();
-                                if(rand > agent.MOBILITY)
+                                if (rand > agent.MOBILITY)
                                 {
                                     var allFreeSpaces = RectList.Where(x => !x.CellObject.Any()).ToList();
                                     var rand2 = RandomGen.Next(0, allFreeSpaces.Count - 1);
                                     var selectedFreeSpace = allFreeSpaces.ElementAt(rand2);
 
-                                    if(agent.IQ > iqGtThan)
+                                    if (agent.IQ > iqGtThan)
                                     {
                                         var foundNeighbors = GetNeighbors(selectedFreeSpace);
                                         var isDisease = foundNeighbors.Any(c => c.CellObject.Any(co => co is Disease));
@@ -1018,7 +1025,7 @@ namespace ASIapp
                     var RectangleModel = rectList.ElementAt(x.GLOBAL_ID - 1);
                     var n = GetNeighbors(RectangleModel).Skip(1);
                     var freeSpace = n.Where(x => !x.CellObject.Any()).ToList();
-                    if(IsDebug && IsTest1Selected)
+                    if (IsDebug && IsTest1Selected)
                     {
                         ///print
                     }
@@ -1094,10 +1101,36 @@ namespace ASIapp
                     }
                 });
 
+                UpdateChart();
+
                 UpdateMesh();
+
+
+
                 ///print
                 ///wykres (main4)
+                ///
+
+
             }
+
+
+
         }
+
+
+        private void UpdateChart()
+        {
+         
+
+            var richValues = new List<double> { agents.Count(a => a.WealthState == AgentsLife.WealthState.Rich) };
+            var fairValues = new List<double> { agents.Count(a => a.WealthState == AgentsLife.WealthState.Fair) };
+            var poorValues = new List<double> { agents.Count(a => a.WealthState == AgentsLife.WealthState.Poor) };
+
+            ChartViewModel.UpdateSeriesValues(richValues, fairValues, poorValues);
+        }
+
+  
+
     }
 }

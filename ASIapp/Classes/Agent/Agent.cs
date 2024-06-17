@@ -18,7 +18,7 @@ namespace ASIapp.Classes.Agent
 
         public int Counter { get; set; } = 0;
 
-        public double INIT_CAPITAL;
+        public  double INIT_CAPITAL = InitCapitIc;
 
         public WealthState WealthState = WealthState.Poor;
 
