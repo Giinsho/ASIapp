@@ -9,13 +9,13 @@ using Microsoft.Win32;
 using ASIapp.Classes;
 using ASIapp.Classes.Agent;
 using ASIapp.Classes.Businesses;
-
+using System.Diagnostics;
 
 using SkiaSharp;
 using LiveCharts;
 using LiveCharts.Wpf;
-
-
+using System.Globalization;
+using System.Text.RegularExpressions;
 namespace ASIapp
 {
 
@@ -43,6 +43,8 @@ namespace ASIapp
 
         private ChartViewModel chartViewModel = new ChartViewModel();
 
+        private List<double> randNums = new List<double>();
+        private int randNumsIndex = 0;
 
 
 
@@ -189,7 +191,8 @@ namespace ASIapp
             Initialize(this);
 
 
-
+            RandomGen = isCustomSeedSelected == true ? new Random(seed) : new Random();
+            RandomGen = isClockSeedSelected == true ? new Random(DateTime.Now.Ticks.GetHashCode()) : new Random();
         }
 
         public FirstPageWindow()
@@ -319,7 +322,7 @@ namespace ASIapp
 
         #endregion
 
-        #region LayoutHandlers
+       
 
         public void TextBox_PreviewNumbersOnly(object sender, TextCompositionEventArgs e)
         {
@@ -336,8 +339,12 @@ namespace ASIapp
         public void Btn_run_Click(object sender, RoutedEventArgs e)
         {
             RandomGen = isCustomSeedSelected == true ? new Random(seed) : new Random();
+            RandomGen = isClockSeedSelected == true ? new Random(DateTime.Now.Ticks.GetHashCode()) : new Random();
+            ResetRandNumsIndex();
 
+            Console.WriteLine("Count agents:"+agents.Count);
             InitABD();
+          
             UpdateMesh();
             RunSimulation();
         }
@@ -351,7 +358,7 @@ namespace ASIapp
         public void Btn_readCaStates_Click(object sender, RoutedEventArgs e)
         {
 
-
+            caStateFile ="";
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             openFileDialog.InitialDirectory = System.IO.Path.Combine(Environment.CurrentDirectory, "");
@@ -379,14 +386,20 @@ namespace ASIapp
 
                         Console.WriteLine(fileLines[i]);
                     }
+
+                  
                 }
                 catch (Exception ex)
                 {
+                 
                     MessageBox.Show($"Error reading file: {ex.Message}");
                 }
+               
+
             }
 
-            UpdateRadioButtonStatus(rbtn_readCaStates, true);
+            UpdateRadioButtonStatus(rbtn_readCaStates, caStateFile.Length != 0);
+
         }
 
         public void CreateCaStatesFromFile(CAstate CA, int n_of_col, int col, int row, int id)
@@ -430,6 +443,7 @@ namespace ASIapp
 
         public void Btn_readAProfile_Click(object sender, RoutedEventArgs e)
         {
+            aProfileFile = "";
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             openFileDialog.InitialDirectory = System.IO.Path.Combine(Environment.CurrentDirectory, "");
@@ -439,28 +453,32 @@ namespace ASIapp
                 try
                 {
                     string fileName = openFileDialog.FileName;
-                    string[] fileLines = File.ReadAllLines(fileName);
-
+                 
+                    aProfileFile = GetFileNameFromPath(fileName + "/A_PROFILE");
                     // Assuming the file format is fixed as described
-                    if (fileLines.Length >= 2)
-                    {
-                        // Split the header line
-                        string[] headers = fileLines[0].Split('\t');
-
+                    string[] fileLines = File.ReadAllLines(fileName);
+                    // Split the header line
+                    string[] headers = fileLines[0].Split('\t');
+                        Console.WriteLine(headers);
                         // Process data lines starting from the second line
-                        for (int i = 1; i < fileLines.Length; i++)
+                        for (int i = 2; i < fileLines.Length; i++)
                         {
-                            string[] data = fileLines[i].Split('\t');
+                            string normalizedLine = Regex.Replace(fileLines[i], @"\s+", " ");
+                            Console.WriteLine(normalizedLine);
+                            string[] data = normalizedLine.Split(' ');
 
+                            Console.WriteLine(data.Length);
                             if (data.Length >= 8)
                             {
                                 var a_id = int.Parse(data[0]);
                                 var a_glob_ID = int.Parse(data[1]);
                                 var IQ = int.Parse(data[2]);
                                 var hState = int.Parse(data[3]);
+
                                 var r_acc_B1 = double.Parse(data[4]);
                                 var r_acc_B2 = double.Parse(data[5]);
                                 var r_acc_B3 = double.Parse(data[6]);
+
                                 var mobility = double.Parse(data[7]);
 
                                 Agent agent = new Agent();
@@ -469,36 +487,49 @@ namespace ASIapp
                                 agent.IQ = IQ;
                                 agent.H_STATE = (AgentsLife.HealthState)hState;
                                 //agent.
-
                                 //                                agent.
-
+                                
                                 agent.MOBILITY = mobility;
+                                agent.WealthStateUpdate();
+                                if (i < agents.Count)
+                                {
+                                    // Update the agent at the existing index
+                                    agents[i] = agent;
+                                }
+                                else
+                                {
+                                    // Add the agent at the next available index
+                                    agents.Add(agent);
+                                }
 
                             }
+
                         }
-                    }
-                    else
-                    {
-                        MessageBox.Show("File does not contain enough lines.");
-                    }
+                       
                 }
                 catch (Exception ex)
                 {
+                    
                     MessageBox.Show($"Error reading file: {ex.Message}");
                 }
-            }
 
-            UpdateRadioButtonStatus(rbtn_readAprofile, true);
+               
+            }
+            UpdateRadioButtonStatus(rbtn_readAprofile, aProfileFile.Length != 0);
+
+
+
 
         }
 
         public void Btn_ReadRandNum_Click(object sender, RoutedEventArgs e)
         {
-
+            randNumFile = "";
+            randNums.Clear();
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             openFileDialog.InitialDirectory = System.IO.Path.Combine(Environment.CurrentDirectory, "");
-
+            if (openFileDialog.ShowDialog() == true)
             {
                 try
                 {
@@ -507,18 +538,47 @@ namespace ASIapp
                     string[] fileLines = File.ReadAllLines(fileName);
                     for (int i = 1; i < fileLines.Length; i++)
                     {
-                        Console.WriteLine(fileLines[i]);
+                        var result = 0.0;
+                        if (double.TryParse(fileLines[i], NumberStyles.Any, CultureInfo.InvariantCulture, out result))
+                        {
+                            Console.WriteLine(result);
+                            randNums.Add(result);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error when parsing Rand Numb");
+                        }
+                      
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error reading file: {ex.Message}");
                 }
+
+               
             }
-            UpdateRadioButtonStatus(rbtn_readRandNum, true);
+            UpdateRadioButtonStatus(rbtn_readRandNum, randNumFile.Length != 0);
 
         }
 
+        #region LayoutHandlers
+        public double GetNextRandomValue()
+        {
+            if (rbtn_readRandNum.IsChecked == true && randNumsIndex < randNums.Count)
+            {
+                return randNums[randNumsIndex++];
+            }
+            else
+            {
+                return RandomGen.NextDouble();
+            }
+        }
+
+        public  void ResetRandNumsIndex()
+        {
+            randNumsIndex = 0;
+        }
 
         public void NumberOfRows_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -917,6 +977,8 @@ namespace ASIapp
             return result;
         }
 
+      
+
         private void insertObject<T>(List<T> cells, int numberOf, Func<int, int, bool> freeFunc,
             Func<int, int, int, T> addFunc) where T : CellObject
         {
@@ -973,19 +1035,29 @@ namespace ASIapp
 
         private void insertAgents()
         {
-            insertObject(agents, numberOfA, (randCol, randRow) =>
+            if (rbtn_readAprofile.IsChecked == true)
             {
-                var anyAgents = !agents.Any(x =>
-                    x.GLOBAL_ID == Agent.CalculateGlobalID(numberOfColumns, randCol, randRow));
-                return anyAgents;
-            }, (i, randCol, randRow) =>
+                Console.Write("A - profile loaded");
+
+               
+            }
+            else
             {
-                var agent = new Agent()
-                    { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow), };
-                agent.CAPITAL = initCapitIc;
-                agent.INIT_CAPITAL = initCapitIc;
-                return agent;
-            });
+                insertObject(agents, numberOfA, (randCol, randRow) =>
+                {
+                    var anyAgents = !agents.Any(x =>
+                        x.GLOBAL_ID == Agent.CalculateGlobalID(numberOfColumns, randCol, randRow));
+                    return anyAgents;
+                }, (i, randCol, randRow) =>
+                {
+                    var agent = new Agent()
+                        { ID = i, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, randCol, randRow), };
+                    agent.CAPITAL = initCapitIc;
+                    agent.INIT_CAPITAL = initCapitIc;
+                    return agent;
+                });
+            }
+        
         }
 
         private async void RunSimulation()
@@ -1007,7 +1079,7 @@ namespace ASIapp
                         var isAnyDisease = neighbors.Any(x => x.CellObject.Any(c => c is Disease));
                         if (isAnyDisease)
                         {
-                            var rand = RandomGen.NextDouble();
+                            var rand = GetNextRandomValue();
                             if (rand <= agent.DISEASE)
                             {
                                 agent.Counter += numberIterSuspB;
@@ -1022,11 +1094,32 @@ namespace ASIapp
                                 var b = isAnyBusiness.First().CellObject.FirstOrDefault(x => x is Business) as Business;
                                 if (agent.CAPITAL >= b.IC_THR)
                                 {
-                                    double b_risk_acc = b.BusinessAccept[b.Type][agent.IQ_STATE];
-                                    var rand = RandomGen.NextDouble();
+                                    double b_risk_acc = 0;
+                                    if (agent.aprofile)
+                                    {
+                                        switch (b.Type)
+                                        {
+                                            case Business.B_TYPE.Business1:
+                                                b_risk_acc = agent.rAccB1_aprofile;
+                                                break;
+                                            case Business.B_TYPE.Business2:
+                                                b_risk_acc = agent.rAccB2_aprofile;
+                                                break;
+                                            case Business.B_TYPE.Business3:
+                                                b_risk_acc = agent.rAccB3_aprofile;
+                                                break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        b_risk_acc = b.BusinessAccept[b.Type][agent.IQ_STATE];
+                                    }
+                                    // if b.Type 
+                                    
+                                    var rand = GetNextRandomValue();
                                     if (rand > b_risk_acc)
                                     {
-                                        agent.CAPITAL += (agent.CAPITAL * b.CAP_INC) - (agent.CAPITAL * b.INV_A);
+                                        agent.CAPITAL = (agent.CAPITAL * b.CAP_INC) - (agent.CAPITAL * b.INV_A);
                                         // ELO TUTAJ
                                         //  agent.CAPITAL = (agent.CAPITAL * b.CAP_INC) - (agent.CAPITAL * b.INV_A);
                                     }
@@ -1038,7 +1131,7 @@ namespace ASIapp
                             }
                             else
                             {
-                                var rand = RandomGen.NextDouble();
+                                var rand = GetNextRandomValue();
                                 if (rand > agent.MOBILITY)
                                 {
                                     var allFreeSpaces = RectList.Where(x => !x.CellObject.Any()).ToList();

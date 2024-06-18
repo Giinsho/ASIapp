@@ -9,9 +9,9 @@
   
              mc:Ignorable="d" Background="White">
 
-      
 
-<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
@@ -170,7 +170,7 @@
                                 <RowDefinition Height="auto" />
                                 <RowDefinition Height="auto" />
                             </Grid.RowDefinitions>
-                            <RadioButton GroupName="TestGroup"  Checked="RadioButton_Checked" x:Name="test_2" VerticalAlignment="Center" HorizontalAlignment="Center">test_2</RadioButton>
+                            <RadioButton GroupName="TestGroup"  Checked="RadioButton_Checked" x:Name="test_2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,18" Grid.RowSpan="2">test_2</RadioButton>
                             <RadioButton Margin="15,0,0,0" Grid.Column="1" GroupName="SeedGroup"  x:Name="RbtnCustomSeed" Checked="RbtnCustomSeed_Checked" VerticalAlignment="Center" HorizontalAlignment="Center">custom__seed</RadioButton>
                             <TextBox  Margin="15,0,0,0" Grid.Column="1" Grid.Row="1"  x:Name="CustomSeedText"  PreviewTextInput="TextBox_PreviewNumbersOnly"  TextChanged="CustomSeedText_TextChanged"  IsEnabled="{Binding ElementName=RbtnCustomSeed, Path=IsChecked}"></TextBox>
                         </Grid>
@@ -244,14 +244,15 @@
                             <Label>max</Label>
                             <TextBox  Grid.Column="1" Text="140" x:Name="iqRangeMax" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="iqMax_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
-                        <Label Grid.Row="1" FontWeight="Bold" Height="26" Grid.RowSpan="2" VerticalAlignment="Top">Health__state</Label>
+                        <Label Grid.Row="1" FontWeight="Bold" Height="26" Grid.RowSpan="1" VerticalAlignment="Top">Health__state</Label>
+
                         <Grid   Grid.Column="0"  Grid.Row="2"  Margin="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
 
-                            <Label Grid.Column="1" FontWeight="Bold">1</Label>
+                            <Label Grid.Column="1" FontWeight="Bold" HorizontalAlignment="Right" Width="46">1</Label>
                         </Grid>
 
                         <Grid   Grid.Column="1"  Grid.Row="2"  Margin="2">
@@ -279,7 +280,7 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <Label Width="50" Content="p__HS1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <TextBox Text="4" x:Name="probabilityHealthState1" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityHS1_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBox Text="0.15" x:Name="probabilityHealthState1" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityHS1_TextChanged" Width="40" Height="26" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2,0,0,0"/>
                         </Grid>
 
                         <Grid   Grid.Column="1"  Grid.Row="3"  Margin="2">
@@ -288,7 +289,7 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <Label Width="50" Content="p__HS2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <TextBox Text="4" x:Name="probabilityHealthState2" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityHS2_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBox Text="0.60" x:Name="probabilityHealthState2" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityHS2_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
 
                         <Grid   Grid.Column="2"  Grid.Row="3"  Margin="2">
@@ -297,7 +298,7 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <Label Width="50" Content="p__HS3" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <TextBox Text="4" x:Name="probabilityHealthState3" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityHS3_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBox Text="0.25" x:Name="probabilityHealthState3" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityHS3_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
 
                         <Grid   Grid.Column="0"  Grid.Row="4"  Margin="2">
@@ -306,7 +307,7 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <Label Width="50" Content="p__ill1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <TextBox Text="4" x:Name="probabilityIllness1" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityIll1_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBox Text="0.70" x:Name="probabilityIllness1" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityIll1_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
 
                         <Grid   Grid.Column="1"  Grid.Row="4"  Margin="2">
@@ -315,7 +316,7 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <Label Width="50" Content="p__ill2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <TextBox Text="4" x:Name="probabilityIllness2" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityIll2_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBox Text="0.20" x:Name="probabilityIllness2" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityIll2_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
 
                         <Grid   Grid.Column="2"  Grid.Row="4"  Margin="2">
@@ -324,7 +325,7 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <Label Width="50" Content="p__ill3" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <TextBox Text="4" x:Name="probabilityIllness3" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityIll3_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBox Text="0.10" x:Name="probabilityIllness3" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="probabilityIll3_TextChanged" Width="40" Height="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
 
                     </Grid>
@@ -687,7 +688,7 @@
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Grid.Column="0" FontWeight="Bold">B1</Label>
+                        <Label Grid.Column="0" FontWeight="Bold">B3</Label>
                         <TextBox x:Name="thrB3" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="thrB3_TextChanged" Width="40" HorizontalContentAlignment="Center" Text="8.0" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         <Label Grid.Column="2" FontWeight="Bold" HorizontalAlignment="Left" Width="36">of IC</Label>
                     </Grid>
@@ -725,36 +726,36 @@
 
                     </Grid>
 
-                    <Grid   Grid.Column="2" Grid.Row="2" Margin="0,0,25,0"    >
+                    <Grid   Grid.Column="2" Grid.Row="2"    HorizontalAlignment="Center" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBox Text="2"  x:Name="increase_of_gap_B1"  TextChanged="increase_of_gap_B1_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <TextBox Text="2"  x:Name="increase_of_gap_B1"  TextChanged="increase_of_gap_B1_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  />
 
                     </Grid>
 
-                    <Grid   Grid.Column="2" Grid.Row="3"   >
+                    <Grid   Grid.Column="2" Grid.Row="3"  HorizontalAlignment="Center" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBox Text="4"  x:Name="increase_of_gap_B2"  TextChanged="increase_of_gap_B2_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,25,0" />
+                        <TextBox Text="4"  x:Name="increase_of_gap_B2"  TextChanged="increase_of_gap_B2_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
                     </Grid>
 
-                    <Grid   Grid.Column="2" Grid.Row="4"   >
+                    <Grid   Grid.Column="2" Grid.Row="4"   HorizontalAlignment="Center" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBox Text="8"  x:Name="increase_of_gap_B3"  TextChanged="increase_of_gap_B3_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,25,0" />
+                        <TextBox Text="8"  x:Name="increase_of_gap_B3"  TextChanged="increase_of_gap_B3_TextChanged" Grid.Column="1" PreviewTextInput="TextBox_PreviewNumbersOnly"  Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  />
 
                     </Grid>
 
@@ -894,7 +895,7 @@
 
                         </Grid.ColumnDefinitions>
 
-                        <TextBox x:Name="thr_rich"  TextChanged="thr_rich_TextChanged"  Text="30"   PreviewTextInput="TextBox_PreviewNumbersOnly" Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                        <TextBox x:Name="thr_rich"  TextChanged="thr_rich_TextChanged"  Text="50"   PreviewTextInput="TextBox_PreviewNumbersOnly" Width="40" HorizontalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Center" />
                         <Label Grid.Column="1" FontWeight="Bold">of IC</Label>
                     </Grid>
                 </Grid>
@@ -904,23 +905,23 @@
 
             </Grid>
 
-            <Grid Grid.Column="1">
+            <Grid Grid.Column="1" HorizontalAlignment="Center" Width="600" Height="1200" VerticalAlignment="Bottom">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Viewbox Margin="50" Stretch="Fill" Grid.Column="0" Grid.Row="0" ClipToBounds="True">
-                    <Canvas x:Name="myCanvas" Height="400" Width="400" Background="White">
+                    <Canvas x:Name="myCanvas" Height="500" Width="500" Background="White">
                         <Canvas.LayoutTransform>
                             <ScaleTransform ScaleY="-1"/>
                         </Canvas.LayoutTransform>
                     </Canvas>
                 </Viewbox>
                 <Viewbox Margin="50" Stretch="Fill" Grid.Column="0" Grid.Row="1" ClipToBounds="True">
-                    <lvc:CartesianChart Series="{Binding Series}" LegendLocation="Left" MinWidth="400" MinHeight="400">
+                    <lvc:CartesianChart Series="{Binding Series}" LegendLocation="Left" MinWidth="500" MinHeight="500">
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis Title="Wealth" LabelFormatter="{Binding YAxes}" MinValue="0"  ></lvc:Axis>
+                            <lvc:Axis Title="Avg.Capital" LabelFormatter="{Binding YAxes}" MinValue="0"  ></lvc:Axis>
                         </lvc:CartesianChart.AxisY>
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis Title="Iteration" Labels="{Binding XAxes}" MinValue="0" ></lvc:Axis>

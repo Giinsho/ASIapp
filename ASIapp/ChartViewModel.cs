@@ -1,7 +1,12 @@
 ﻿using LiveCharts;
 using LiveCharts.Wpf;
+using SkiaSharp;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows;
+using System.Windows.Media;
+using Color = System.Drawing.Color;
+using SystemColors = System.Windows.SystemColors;
 
 namespace ASIapp
 {
@@ -82,15 +87,15 @@ namespace ASIapp
             {
                 if (Series.Count >= 4)
                 {
-                    // Find the maximum value in each collection
-                    double maxPoorValue = poorValues.Any() ? poorValues.Max() : 0;
-                    double maxFairValue = fairValues.Any() ? fairValues.Max() : 0;
-                    double maxRichValue = richValues.Any() ? richValues.Max() : 0;
+                    // Find the avg value in each collection
+                    double avgPoorValue = poorValues.Any() ? poorValues.Average() : 0;
+                    double avgFairValue = fairValues.Any() ? fairValues.Average() : 0;
+                    double avgRichValue = richValues.Any() ? richValues.Average() : 0;
 
-                    // Add the maximum values to the corresponding series
-                    Series[0].Values.Add((double)maxPoorValue);
-                    Series[1].Values.Add((double)maxFairValue );
-                    Series[2].Values.Add((double)maxRichValue );
+                    // Add the avg values to the corresponding series
+                    Series[0].Values.Add((double)avgPoorValue);
+                    Series[1].Values.Add((double)avgFairValue );
+                    Series[2].Values.Add((double)avgRichValue );
 
                     // Add InitCapitIc to the Init Capital series
                     Series[3].Values.Add((double)InitCapitIc);

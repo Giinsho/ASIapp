@@ -22,6 +22,9 @@ namespace ASIapp.Classes.Agent
 
         public WealthState WealthState = WealthState.Poor;
 
+        public double rAccB1_aprofile = 0.0,  rAccB2_aprofile = 0.0, rAccB3_aprofile = 0.0;
+        public bool aprofile = false;
+
 
         public Agent()
         {
