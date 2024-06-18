@@ -7,17 +7,19 @@
         DataContext="{Binding dCon}"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
   
-             mc:Ignorable="d" Background="White">
+             mc:Ignorable="d" Background="LightGray">
 
 
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Border BorderBrush="Black" BorderThickness="1">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
+            <Border BorderBrush="Black" BorderThickness="2">
+                    <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
@@ -202,8 +204,10 @@
 
 
                 <StackPanel Grid.Row="5" >
-                    <Label FontWeight="Bold">Parameters of A</Label>
-                    <Grid>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Label FontWeight="Bold">Parameters of A</Label>
+                        </Border>
+                        <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -344,9 +348,10 @@
                         <Label  Grid.Column="2">D__IC__dec__rate</Label>
                         <TextBox Text="0.1" x:Name="numberDicDecRate" Grid.Column="3" PreviewTextInput="TextBox_PreviewNumbersOnly" TextChanged="numberDicDecRate_TextChanged"></TextBox>
                     </Grid>
-
-                    <Label FontWeight="Bold">Risk__accept__level (IQ)</Label>
-                    <Grid>
+                    <Border BorderBrush="Black" BorderThickness="2">
+                         <Label FontWeight="Bold">Risk__accept__level (IQ)</Label>
+                    </Border>
+                            <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
@@ -494,7 +499,9 @@
                         </Grid>
 
                     </Grid>
-                    <Label FontWeight="Bold">Mobility (IQ)</Label>
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Label FontWeight="Bold">Mobility (IQ)</Label>
+                    </Border>
                     <Grid VerticalAlignment="Center">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -904,7 +911,7 @@
                 </Grid>
 
             </Grid>
-
+            </Border>
             <Grid Grid.Column="1" HorizontalAlignment="Center" Width="600" Height="1200" VerticalAlignment="Bottom">
 
                 <Grid.RowDefinitions>
@@ -933,6 +940,7 @@
             </Grid>
         </Grid>
 
+    </Border>
     </ScrollViewer>
 </UserControl>
 
