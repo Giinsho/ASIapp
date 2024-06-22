@@ -21,7 +21,7 @@ namespace ASIapp.Classes.Businesses
         public Dictionary<B_TYPE, Dictionary<IqState, double>> BusinessAccept;
 
 
-
+        public int emergencyHops = 0;
 
         public enum B_TYPE
         {

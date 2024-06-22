@@ -9,6 +9,9 @@ namespace ASIapp.Classes
 
     public class Disease : CellObject
     {
+
+        public int emergencyHops = 0;
+
         public Disease() { }
 
         public Disease(CellObject cell) : this()

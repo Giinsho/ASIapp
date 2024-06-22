@@ -22,8 +22,35 @@ namespace ASIapp.Classes.Agent
 
         public WealthState WealthState = WealthState.Poor;
 
-        public double rAccB1_aprofile = 0.0,  rAccB2_aprofile = 0.0, rAccB3_aprofile = 0.0;
+        public double rAccB1_aprofile = 0.0;
+        public double rAccB2_aprofile = 0.0;
+        public double rAccB3_aprofile = 0.0;
         public bool aprofile = false;
+
+        #region AgentActivity
+
+            public enum Reason
+            {
+                Agent = 1,
+                Disease = 2,
+                Business1 = 3,
+                Business2 = 4,
+                Business3 = 5,
+            }
+
+            //Agent ID 
+            //Agent global ID
+            public bool positionChanged = false;
+            // current capital
+            public bool capitalIncreased = false;
+            public Reason increaseReason;
+            public bool capitalDecreased = false;
+            public Reason decreaseReason;
+            public bool capitalNotChange = true;
+            public int diseaseSuspendBusiness = 0;
+            public int emergencyHops = 0;
+
+        #endregion
 
 
         public Agent()

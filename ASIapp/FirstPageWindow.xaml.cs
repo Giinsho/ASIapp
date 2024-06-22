@@ -16,6 +16,8 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Path = System.IO.Path;
+
 namespace ASIapp
 {
 
@@ -52,13 +54,15 @@ namespace ASIapp
 
         public enum CAstate
         {
-            Agent,
-            Disease,
-            Business1,
-            Business2,
-            Business3
+            Empty = 0,
+            Agent = 1,
+            Disease = 2,
+            Business1 = 3,
+            Business2 = 4,
+            Business3 = 5,
         }
 
+        public int delayXD = 1;
 
         #endregion
 
@@ -193,11 +197,12 @@ namespace ASIapp
 
             RandomGen = isCustomSeedSelected == true ? new Random(seed) : new Random();
             RandomGen = isClockSeedSelected == true ? new Random(DateTime.Now.Ticks.GetHashCode()) : new Random();
+    
         }
 
         public FirstPageWindow()
         {
-
+            
         }
 
         #region Draw
@@ -255,6 +260,7 @@ namespace ASIapp
             ColorCellsAsBusinesses();
             ColorCellsAsAgents();
         }
+     
 
         private void ColorCellsAsDiseases()
         {
@@ -296,6 +302,7 @@ namespace ASIapp
             {
                 var a = rectList.ElementAt(x.GLOBAL_ID - 1);
                 a.CellObject.Add(x);
+                Console.WriteLine(x.GLOBAL_ID);
                 Brush brush = null;
                 if (x.IsAgentPoor())
                 {
@@ -342,11 +349,22 @@ namespace ASIapp
             RandomGen = isClockSeedSelected == true ? new Random(DateTime.Now.Ticks.GetHashCode()) : new Random();
             ResetRandNumsIndex();
 
-            Console.WriteLine("Count agents:"+agents.Count);
-            InitABD();
+            if (rbtn_readCaStates.IsChecked == true)
+            {
+                Console.WriteLine("Count agents:" + agents.Count);
+                Console.WriteLine("CA_STATES loaded");
+            }
+            else
+            {
+                InitABD();
+            }
+
           
+
             UpdateMesh();
             RunSimulation();
+
+
         }
 
         static string GetFileNameFromPath(string filePath)
@@ -378,6 +396,7 @@ namespace ASIapp
                     for (int i = 1; i < fileLines.Length; i++)
                     {
                         string[] values = fileLines[i].Split(' ');
+               
                         for (int j = 0; j < values.Length; j++)
                         {
                             CreateCaStatesFromFile((CAstate)Enum.Parse(typeof(CAstate), values[j]),
@@ -391,38 +410,54 @@ namespace ASIapp
                 }
                 catch (Exception ex)
                 {
-                 
                     MessageBox.Show($"Error reading file: {ex.Message}");
                 }
-               
-
             }
-
             UpdateRadioButtonStatus(rbtn_readCaStates, caStateFile.Length != 0);
-
         }
 
         public void CreateCaStatesFromFile(CAstate CA, int n_of_col, int col, int row, int id)
         {
+            agents.Clear();
             CellObject cell = new CellObject(n_of_col, col, row);
-
+            
             switch (CA)
             {
+
                 case CAstate.Agent:
+                    Console.WriteLine("AGENT");
                     Agent agent = new Agent(cell);
                     CA_STATES.Add(agent);
                     agents.Add(agent);
                     break;
 
-                case CAstate.Business1 or CAstate.Business2 or CAstate.Business3:
-                    var business = new Business((Business.B_TYPE)CA)
+                case CAstate.Business1:
+                    Console.WriteLine("BUSINESS 1");
+                    var business = new Business(Business.B_TYPE.Business1)
                         { ID = id, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, col, row) };
                     CA_STATES.Add(business);
                     businesses.Add(business);
                     break;
-                case CAstate.Disease:
 
-                    Disease disease = new Disease(cell);
+                case CAstate.Business2:
+                    Console.WriteLine("BUSINESS 2");
+                    business = new Business(Business.B_TYPE.Business2)
+                        { ID = id, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, col, row) };
+                    CA_STATES.Add(business);
+                    businesses.Add(business);
+                    break;
+
+                case CAstate.Business3:
+                    Console.WriteLine("BUSINESS 3");
+                    business = new Business(Business.B_TYPE.Business3)
+                        { ID = id, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, col, row) };
+                    CA_STATES.Add(business);
+                    businesses.Add(business);
+                    break;
+
+                case CAstate.Disease:
+                    Console.WriteLine("DISEASE");
+                    Disease disease = new Disease(cell) { ID = id, GLOBAL_ID = Agent.CalculateGlobalID(numberOfColumns, col, row) };
                     CA_STATES.Add(disease);
                     diseases.Add(disease);
                     break;
@@ -452,6 +487,7 @@ namespace ASIapp
             {
                 try
                 {
+                    
                     string fileName = openFileDialog.FileName;
                  
                     aProfileFile = GetFileNameFromPath(fileName + "/A_PROFILE");
@@ -461,48 +497,50 @@ namespace ASIapp
                     string[] headers = fileLines[0].Split('\t');
                         Console.WriteLine(headers);
                         // Process data lines starting from the second line
-                        for (int i = 2; i < fileLines.Length; i++)
+                        for (int i = 2, a_i = 0; i < fileLines.Length; i++ ,a_i++)
                         {
                             string normalizedLine = Regex.Replace(fileLines[i], @"\s+", " ");
-                            Console.WriteLine(normalizedLine);
+                            //Console.WriteLine(normalizedLine);
                             string[] data = normalizedLine.Split(' ');
 
-                            Console.WriteLine(data.Length);
+                            //Console.WriteLine(data.Length);
                             if (data.Length >= 8)
                             {
                                 var a_id = int.Parse(data[0]);
                                 var a_glob_ID = int.Parse(data[1]);
                                 var IQ = int.Parse(data[2]);
                                 var hState = int.Parse(data[3]);
-
                                 var r_acc_B1 = double.Parse(data[4]);
                                 var r_acc_B2 = double.Parse(data[5]);
                                 var r_acc_B3 = double.Parse(data[6]);
-
                                 var mobility = double.Parse(data[7]);
+
+
+                                Console.WriteLine(a_glob_ID);
 
                                 Agent agent = new Agent();
                                 agent.ID = a_id;
                                 agent.GLOBAL_ID = a_glob_ID;
                                 agent.IQ = IQ;
                                 agent.H_STATE = (AgentsLife.HealthState)hState;
-                                //agent.
-                                //                                agent.
-                                
+                                agent.rAccB1_aprofile = r_acc_B1;
+                                agent.rAccB2_aprofile = r_acc_B2;
+                                agent.rAccB3_aprofile = r_acc_B3;
                                 agent.MOBILITY = mobility;
                                 agent.WealthStateUpdate();
-                                if (i < agents.Count)
+
+                                if (a_i < agents.Count())
                                 {
-                                    // Update the agent at the existing index
-                                    agents[i] = agent;
+                                    agents[a_i] = agent;
                                 }
                                 else
                                 {
-                                    // Add the agent at the next available index
                                     agents.Add(agent);
                                 }
-
-                            }
+                               
+                                
+                                Console.WriteLine(data.Length);
+                        }
 
                         }
                        
@@ -684,6 +722,12 @@ namespace ASIapp
 
 
             CustomSeedText.Clear();
+        }
+
+
+        public void delayELO_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateParameterInt(sender, ref delayXD);
         }
 
         public void CustomSeedText_TextChanged(object sender, TextChangedEventArgs e)
@@ -1063,9 +1107,11 @@ namespace ASIapp
         private async void RunSimulation()
         {
             chartViewModel.ResetChart();
+          
             for (int i = 1; i <= NumberOfIterations; i++)
             {
-                await Task.Delay(1000);
+            
+                await Task.Delay(delayXD*1000);
                 agents.ForEach(agent =>
                 {
                     if (agent.Counter > 0)
@@ -1084,6 +1130,10 @@ namespace ASIapp
                             {
                                 agent.Counter += numberIterSuspB;
                                 agent.CAPITAL -= (agent.CAPITAL * numberDecRate);
+                                agent.capitalDecreased = true;
+                                agent.diseaseSuspendBusiness++;
+                                agent.decreaseReason = Agent.Reason.Disease;
+                        
                             }
                         }
                         else
@@ -1120,18 +1170,24 @@ namespace ASIapp
                                     if (rand > b_risk_acc)
                                     {
                                         agent.CAPITAL = (agent.CAPITAL * b.CAP_INC) - (agent.CAPITAL * b.INV_A);
+                                        agent.capitalIncreased = true;
+                                        agent.capitalDecreased = false;
+                                        
                                         // ELO TUTAJ
                                         //  agent.CAPITAL = (agent.CAPITAL * b.CAP_INC) - (agent.CAPITAL * b.INV_A);
                                     }
                                     else
                                     {
                                         agent.CAPITAL -= (agent.CAPITAL * b.INV_A);
+                                        agent.capitalIncreased = false;
+                                        agent.capitalDecreased = true;
                                     }
                                 }
                             }
                             else
-                            {
-                                var rand = GetNextRandomValue();
+                            { 
+                             
+                               var rand = GetNextRandomValue();
                                 if (rand > agent.MOBILITY)
                                 {
                                     var allFreeSpaces = RectList.Where(x => !x.CellObject.Any()).ToList();
@@ -1170,6 +1226,7 @@ namespace ASIapp
                     var freeSpace = n.Where(x => !x.CellObject.Any()).ToList();
                     if (IsDebug && IsTest1Selected)
                     {
+
                         ///print
                     }
 
@@ -1253,6 +1310,8 @@ namespace ASIapp
                     a.WealthStateUpdate();
                 }
 
+                WriteResultsTxt(i, agents);
+
                 UpdateChart();
 
                 UpdateMesh();
@@ -1262,12 +1321,75 @@ namespace ASIapp
                 ///print
                 ///wykres (main4)
                 ///
-
+                /// 
+              
 
             }
 
 
 
+        }
+
+
+        private void WriteResultsTxt(int iteration, List<Agent> agents)
+        {
+            string filePath = System.IO.Path.Combine(Environment.CurrentDirectory, "RESULTS/results.txt");
+            if (iteration == 1)
+            {
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    // Writing the headers
+                    writer.WriteLine("#\t\t1\t\t2\t\t3\t\t4\t\t5\t\t6\t\t7\t\t8\t\t9\t\t10\t\t11\t\t12\t\t13");
+                    writer.WriteLine("#\t\t\t\tpoorest\t\tpoorest\t\tpoorest\t\trichest\t\trichest\t\trichest\t\tpoorest\t\tfair\t\trichest\t\t%of\t\t%of\t\t%of");
+                    writer.WriteLine("#\t\titer\t\tCAP\t\tA_id\t\tglob_ID\t\tCAP\t\tA_id\t\tglob_ID\t\tavCAP\t\tavCAP\t\tavCAP\t\tpoorest\t\tfair\t\trichest");
+                }
+            }
+
+            using (StreamWriter writer = new StreamWriter(filePath, true))
+            {
+                // Find poorest and richest agents
+                Agent poorestAgent = agents.OrderBy(a => a.CAPITAL).First();
+                Agent richestAgent = agents.OrderByDescending(a => a.CAPITAL).First();
+
+                double poorestCapital = poorestAgent.CAPITAL;
+                int poorestAgentId = poorestAgent.ID;
+                int poorestAgentGlobalID = poorestAgent.GLOBAL_ID;
+
+                double richestCapital = richestAgent.CAPITAL;
+                int richestAgentId = richestAgent.ID;
+                int richestAgentGlobalID = richestAgent.GLOBAL_ID;
+
+                // Calculate average capital for each WealthState category
+                double poorestAvgCapital = agents.Where(a => a.WealthState == AgentsLife.WealthState.Poor).DefaultIfEmpty().Average(a => a?.CAPITAL ?? 0);
+                double fairAvgCapital = agents.Where(a => a.WealthState == AgentsLife.WealthState.Fair).DefaultIfEmpty().Average(a => a?.CAPITAL ?? 0);
+                double richestAvgCapital = agents.Where(a => a.WealthState == AgentsLife.WealthState.Rich).DefaultIfEmpty().Average(a => a?.CAPITAL ?? 0);
+
+                // Calculate percentage of agents in each WealthState category
+                int totalAgents = agents.Count();
+                double percentOfPoorest = (double)agents.Count(a => a.WealthState == AgentsLife.WealthState.Poor) / totalAgents * 100;
+                double percentOfFair = (double)agents.Count(a => a.WealthState == AgentsLife.WealthState.Fair) / totalAgents * 100;
+                double percentOfRichest = (double)agents.Count(a => a.WealthState == AgentsLife.WealthState.Rich) / totalAgents * 100;
+
+      
+                writer.WriteLine(string.Format(
+                    "\t\t{0, -8}\t{1, -10}\t{2, -10}\t{3, -12}\t{4, -10:F2}\t{5, -10}\t{6, -12}\t{7, -10:F2}\t{8, -10:F2}\t{9, -10:F2}\t{10, -10:F2}\t{11, -10:F2}\t{12, -10:F2}",
+                    iteration,
+                    poorestCapital,
+                    poorestAgentId,
+                    poorestAgentGlobalID,
+                    richestCapital,
+                    richestAgentId,
+                    richestAgentGlobalID,
+                    poorestAvgCapital,
+                    fairAvgCapital,
+                    richestAvgCapital,
+                    percentOfPoorest,
+                    percentOfFair,
+                    percentOfRichest
+                ));
+            }
+
+            Console.WriteLine($"Results written to {filePath}");
         }
 
 
